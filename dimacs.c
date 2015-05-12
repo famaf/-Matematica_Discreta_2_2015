@@ -1,10 +1,8 @@
 #include <assert.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "helpers.h"
-
 
 
 static inline char *_non_empty_line(FILE *fd) {

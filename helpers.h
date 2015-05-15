@@ -1,5 +1,5 @@
-#ifndef _HELPERS_H
-#define _HELPERS_H
+#ifndef HELPERS_H
+#define HELPERS_H
 
 #include <stdio.h>
 
@@ -18,7 +18,7 @@ char *readline_from_stdin(void);
  */
 
 /*
- * Lea la entrada del usuario de la entrada estándar hasta que se detecta un salto 
+ * Lee la entrada del usuario de la entrada estándar hasta que se detecta un salto 
  * de línea, y devolver el (dinámicamente asignada) string correspondiente.
  * La persona que llama a esta función es responsable de la memoria asignada.
  * POST: Una nueva cadena terminada en cero se devuelve con el contenido lee de la

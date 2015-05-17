@@ -1,31 +1,46 @@
-#include <stdio.h>
-#include <stdint.h>
-#include <stdlib.h>
 #include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include "helpers.h"
 #include "api.h"
 
 
 struct GrafoPlus
 {
-    u32 vertex_count;
-    u32 edge_count;
-    CamAux vecinos[vertex_count];
-} GrafoSt;
+    u32 vertex_count; // Cantidad de vertices del grafo
+    u32 edges_count; // Cantidad de lados del grafo
+    u32 color_count; // Cantidad de colores del grafo --> "X(G)"
+    //u32 orden_ingresado[vertex_count]; // Orden en que se ingresaron los vertices
+    //u32 grado_x_vertice[vertex_count]; // Grado (cantidad de vecinos) por vertice
+
+    //CamAux contenido_celda[vertex_count]; // Estructura que contiene el ID del vertice, sus vecinos
+                                               // en un arreglo, y el color del vertice.
+} /*GrafoSt*/;
 
 
-struct Campos_Auxiliares
+/*struct Campos_Auxiliares
 {
-    u32 identificador;
-    u32 *vecinos[]; // ESTE SERIA EL ARREGLO DE VECINOS DE CADA VERTICE, DECLARAR BIEN
-    u32 orden_ingresado[vertex_count];
-    u32 grado_x_vertice[vertex_count]
-} CamAux;
+    u32 identificador; // Identificador del vertice
+    //u32 vecinos[]; // Arreglo de vecinos
+    u32 color // Color del vertice
+} CamAux;*/
 
 
 //-----------------------------------------------------------------------------
-GrapfP NuevoGraf()
+GrapfP NuevoGraf(void)
 {
-    GrapfP G = calloc(1, sizeof(GrafoSt));
+    GrapfP G = calloc(1, sizeof(struct GrafoPlus/*GrafoSt*/));
+
+    if (G == NULL)
+    {
+        return NULL;
+    }
+
+    G -> vertex_count = 0;
+    G -> edges_count  = 0;
+    G -> color_count = 0;
 
     // ASIGNA TODOS LOS CAMPOS DE LA ESTRUCTURA
 
@@ -35,19 +50,93 @@ GrapfP NuevoGraf()
 
 int DestruirGraft(Grapfp G)
 {
-    assert(G != NULL);
+    if(G == NULL)
+    {
+        return 0;
+    }
 
+    free(G);
+
+    return 1;
     // LIBERA MEMORIA ALOCADA DE LA ESTRUCTURA
 }
 
 
-int LeerGrafo(GrapfP G)
-{
-    //ESTRUCTURA DIMACS QUE HICIMOS EN TAD dimacs.c
+//-----------------------------------------------------------------------------
+//                          ESTRUCTURA DIMACS (Falta Modificar)
+//-----------------------------------------------------------------------------
+static inline char *_non_empty_line(FILE *fd) {
+    assert(fd != NULL);
+    char *line = readline(fd);
+    while (strlen(line) == 0){
+        free(line);
+        line = readline(fd);
+    }
+    return(line);
 }
 
 
-int ImprimirGrafo(GrapfP G)
+int LeerGrafo(Grapfp G) 
+{
+    //assert(fd != NULL);
+    FILE *fd = NULL;
+    fd = stdin;
+    int scan_result = 0;
+    char *line = NULL;
+    unsigned int vertex_count = 0, edges_count = 0;
+
+    line = _non_empty_line(fd); // line es un buffer, sscanf lee los elemento del buffer
+
+    /* Primera(s) Linea: Si empieza con 'c' se ignora y se pasa a la siguiente */
+    while (line[0] == 'c')
+    {
+        free(line);
+        line = _non_empty_line(fd);
+    }
+
+    /* Segunda Linea: Debe contener cantidad de vértices y lados */
+
+    scan_result = sscanf(line, "p edge %u %u\n", &vertex_count, &edges_count);
+    
+    free(line);
+    
+    if (scan_result != 2)
+    {
+        return -1;
+    }
+
+    /* siguiente linea edges_count debe ser aristas */
+    for (unsigned int i = 0; i < edges_count; i++)
+    {
+        unsigned int left = 0, right = 0;
+
+        line = _non_empty_line(fd);
+
+        scan_result = sscanf(line, "e %u %u", &left, &right);
+
+        if (left == right)
+        {
+            return -1;
+        }
+
+        if (scan_result != 2)
+        {
+            return -1;
+        }
+
+        free(line);
+
+
+    }
+
+    G -> vertex_count = vertex_count;
+    G -> edges_count = edges_count;
+
+    return vertex_count;
+}
+//-----------------------------------------------------------------------------
+
+/*int ImprimirGrafo(GrapfP G)
 {
     // IMPLEMENTAR
 }
@@ -62,23 +151,6 @@ int ImprimirColor(GrapfP G, u32 i)
 u32 CantidadDeColores(GrapfP G)
 {
 
-}
+}*/
 //-----------------------------------------------------------------------------
 
-/*
-struct ESTRUCTURA
-{
-    int identificador;
-    unsigned  int *vecinos;
-    unsigned int orden_ingresado[vertices_count];
-    unsigned int grado_x_vertice[vertices_count]
-};
-
-typedef struct Grafoplus
-{
-    unsigned int vertices_count;
-    unsigned int edges_count;
-    ESTRUCTURA lista_vertices[vertices_count];
-} GrafoSt;
-
-*/

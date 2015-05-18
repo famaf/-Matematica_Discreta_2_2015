@@ -4,15 +4,15 @@
 
 int main()
 {
-    Grapfd grafo = NULL;
+    GrapfP grafo = NuevoGraf();
 
     printf("ANTES DE NuevoGraf\n");
 
-    grafo = NuevoGraf();
+    //grafo = NuevoGraf();
 
     printf("DESPUES DE NuevoGraf y ANTES DE LeerGraf\n");
 
-    LeerGraf(grafo);
+    LeerGrafo(grafo);
 
     printf("DESPUES DE LeerGraf y ANTES DE DestruirGraf\n");
 

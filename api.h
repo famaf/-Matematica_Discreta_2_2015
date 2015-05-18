@@ -4,18 +4,19 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include "helpers.h"
 
 
 typedef uint32_t u32;
 
 
-typedef /*GrafSt*/ struct GrafoPlus *GrafP;
+typedef struct GrafoPlus *GrapfP;
 
 
-GrapfP NuevoGraf(void);
+GrapfP NuevoGraf();
 
 
-int DestruirGraft(Grapfp G);
+int DestruirGraf(GrapfP G);
 
 
 int LeerGrafo(GrapfP G);

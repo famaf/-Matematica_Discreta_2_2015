@@ -17,7 +17,7 @@ struct GrafoPlus
 
     //CamAux contenido_celda[vertex_count]; // Estructura que contiene el ID del vertice, sus vecinos
                                                // en un arreglo, y el color del vertice.
-} /*GrafoSt*/;
+} GrafoSt;
 
 
 /*struct Campos_Auxiliares
@@ -29,9 +29,9 @@ struct GrafoPlus
 
 
 //-----------------------------------------------------------------------------
-GrapfP NuevoGraf(void)
+GrapfP NuevoGraf()
 {
-    GrapfP G = calloc(1, sizeof(struct GrafoPlus/*GrafoSt*/));
+    GrapfP G = calloc(1, sizeof(GrafoSt));
 
     if (G == NULL)
     {
@@ -48,7 +48,7 @@ GrapfP NuevoGraf(void)
 }
 
 
-int DestruirGraft(Grapfp G)
+int DestruirGraf(GrapfP G)
 {
     if(G == NULL)
     {
@@ -76,7 +76,7 @@ static inline char *_non_empty_line(FILE *fd) {
 }
 
 
-int LeerGrafo(Grapfp G) 
+int LeerGrafo(GrapfP G) 
 {
     //assert(fd != NULL);
     FILE *fd = NULL;

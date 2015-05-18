@@ -65,25 +65,31 @@ u32 *translation_table;
 uint table_count = 0;
 int add_translation_table(u32 vertex){
     bool exist = false;
+    int i = 0;
     if(translation_table == NULL)
     {
         translation_table=malloc(1, vertex_count*sizeof(u32));
     }
     while(i<table_count && !exist) {
         exist = (translation_table[i] == vertex);
+        i++;
     }
     if(!exist){
         translation_table[table_count] = vertex;
         table_count += 1;
+        return table_count - 1;
+    }else{
         return i;
-    }
-    else{
-        return -1;
     }
 }
 
 void add_neighbor(u32 vertex, u32 neighbor, int pos){
-    G->content[pos]->vecinos = realloc(G->content[pos]->vecinos[G->content[pos]->grado], (grado_aux+1)*sizeof(u32));
+    u32 grado_aux = G->content[pos]->grado;
+    if (G->content[pos]->vecinos == NULL) {
+        G->content[pos]->vecinos = malloc(1, sizeof(u32));
+    }else{
+        G->content[pos]->vecinos = realloc(G->content[pos]->vecinos[grado_aux], (grado_aux+1)*sizeof(u32));
+    }
     G->content[pos]->vecinos[grado_aux] = neighbor;
     G->content[pos]->grado += 1;
 }
@@ -148,11 +154,8 @@ int LeerGrafo(GrapfP G)
         }else{
             pos1 = add_translation_table(left);
             pos2 = add_translation_table(right);
-            if(pos1 >= 0){
-                add_neighbor(left, right, pos1);
-            }
-            if(pos2 >= 0){
-                add_neighbor(right, left, pos2);
+            add_neighbor(right, pos1);
+            add_neighbor(left, pos2);
             }
         }
 

@@ -148,8 +148,12 @@ int LeerGrafo(GrapfP G)
         }else{
             pos1 = add_translation_table(left);
             pos2 = add_translation_table(right);
-            add_neighbor(left, right, pos1);
-            add_neighbor(right, left, pos2);
+            if(pos1 >= 0){
+                add_neighbor(left, right, pos1);
+            }
+            if(pos2 >= 0){
+                add_neighbor(right, left, pos2);
+            }
         }
 
         free(line);

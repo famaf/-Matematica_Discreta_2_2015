@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include "helpers.h"
 #include "api.h"
 
@@ -26,6 +27,9 @@ struct Campos_Auxiliares
     u32 color; // Color del vertice
 } CamAux;
 
+
+u32 *translation_table;
+u32 table_count = 0;
 
 //-----------------------------------------------------------------------------
 GrapfP NuevoGraf()
@@ -60,15 +64,12 @@ int DestruirGraf(GrapfP G)
     // LIBERA MEMORIA ALOCADA DE LA ESTRUCTURA
 }
 
-
-u32 *translation_table;
-uint table_count = 0;
-int add_translation_table(u32 vertex){
+u32 add_translation_table(u32 vertex){
     bool exist = false;
-    int i = 0;
+    u32 i = 0;
     if(translation_table == NULL)
     {
-        translation_table=malloc(1, vertex_count*sizeof(u32));
+        translation_table= calloc(1, vertex_count*sizeof(u32));
     }
     while(i<table_count && !exist) {
         exist = (translation_table[i] == vertex);
@@ -83,10 +84,10 @@ int add_translation_table(u32 vertex){
     }
 }
 
-void add_neighbor(u32 vertex, u32 neighbor, int pos){
+void add_neighbor(GrapfP G, u32 neighbor, u32 pos){
     u32 grado_aux = G->content[pos]->grado;
     if (G->content[pos]->vecinos == NULL) {
-        G->content[pos]->vecinos = malloc(1, sizeof(u32));
+        G->content[pos]->vecinos = calloc(1, sizeof(u32));
     }else{
         G->content[pos]->vecinos = realloc(G->content[pos]->vecinos[grado_aux], (grado_aux+1)*sizeof(u32));
     }
@@ -115,9 +116,9 @@ int LeerGrafo(GrapfP G)
     fd = stdin;
     int scan_result = 0;
     char *line = NULL;
-    int pos1 = 0;
-    int pos2 = 0;
-    unsigned int vertex_count = 0, edges_count = 0;
+    u32 pos1 = 0;
+    u32 pos2 = 0;
+    u32 vertex_count = 0, edges_count = 0;
 
     line = _non_empty_line(fd); // line es un buffer, sscanf lee los elemento del buffer
 
@@ -154,18 +155,15 @@ int LeerGrafo(GrapfP G)
         }else{
             pos1 = add_translation_table(left);
             pos2 = add_translation_table(right);
-            add_neighbor(right, pos1);
-            add_neighbor(left, pos2);
+            add_neighbor(G, right, pos1);
+            add_neighbor(G, left, pos2);
             }
-        }
+    }
 
         free(line);
 
-
-    }
-
-    G -> vertex_count = vertex_count;
-    G -> edges_count = edges_count;
+    G->vertex_count = vertex_count;
+    G->edges_count = edges_count;
 
     return vertex_count;
 }

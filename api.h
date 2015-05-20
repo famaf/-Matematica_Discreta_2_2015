@@ -10,7 +10,7 @@ typedef uint32_t u32;
 
 
 typedef struct GrafoPlus *GrapfP;
-typedef struct Campos_Auxiliares Vertex;
+typedef struct Vertex_Data Vertex;
 
 
 GrapfP NuevoGraf();

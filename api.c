@@ -7,12 +7,12 @@
 #include "helpers.h"
 #include "api.h"
 
-struct Campos_Auxiliares
+struct Vertex_Data
 {
     u32 grado; // Grado del vertice
     u32 *vecinos; // Arreglo de vecinos
     u32 color; // Color del vertice
-} CamAux;
+};
 
 struct GrafoPlus
 {
@@ -21,7 +21,7 @@ struct GrafoPlus
     u32 color_count; // Cantidad de colores del grafo --> "X(G)"
     //u32 orden_ingresado[vertex_count]; // Orden en que se ingresaron los vertices
     //u32 grado_x_vertice[vertex_count]; // Grado (cantidad de vecinos) por vertice
-    Vertex *content; // Estructura que contiene el ID del vertice, sus vecinos
+    Vertex *vertex_array; // Estructura que contiene el ID del vertice, sus vecinos
                                                // en un arreglo, y el color del vertice.
 } GrafoSt;
 
@@ -44,6 +44,7 @@ GrapfP NuevoGraf()
     G -> vertex_count = 0;
     G -> edges_count  = 0;
     G -> color_count = 0;
+    G -> vertex_array = NULL;
 
     // ASIGNA TODOS LOS CAMPOS DE LA ESTRUCTURA
 
@@ -61,13 +62,13 @@ int DestruirGraf(GrapfP G)
         return 0;
     }
     for(i;i<G->vertex_count;i++){
-        // j = G->content[i].grado;
+        // j = G->vertex_array[i].grado;
         // for(j;j>0;j--){
-        //     free(G->content[i].vecinos[j]);
+        //     free(G->vertex_array[i].vecinos[j]);
         // }
-        free(G->content[i].vecinos);
+        free(G->vertex_array[i].vecinos);
     }
-    free(G->content);
+    free(G->vertex_array);
     free(G);
     free(translation_table);
 
@@ -75,42 +76,54 @@ int DestruirGraf(GrapfP G)
     // LIBERA MEMORIA ALOCADA DE LA ESTRUCTURA
 }
 
-int add_translation_table(GrapfP G, u32 vertex){
+int add_translation_table(GrapfP G, u32 vertex)
+{
     bool exist = false;
     int i = 0;
+
     if(translation_table == NULL)
     {
         printf("creo la tablaaa\n");
         translation_table = calloc(G->vertex_count, sizeof(u32));
     }
     printf("table count es %u\n", table_count);
-    while(i<table_count && !exist) {
+    while(i<table_count && !exist)
+    {
         printf("pitaaaaaaaa\n");
         exist = (translation_table[i] == vertex);
         i++;
     }
-    if(!exist){
+    
+    if(!exist)
+    {
         translation_table[table_count] = vertex;
         printf("acabo de agregarlooo a translation_table\n");
-        G->content[table_count].grado = 0;
+        G->vertex_array[table_count].grado = 0;
         table_count += 1;
         return -1;
-    }else{
-        return i-1;
+    }
+    else
+    {
+        return (i-1);
     }
 }
 
-void add_neighbor(GrapfP G, u32 neighbor, int pos){
-    printf("chequeo grado %u\n", G->content[pos].grado);
-    if (G->content[pos].grado == 0) {
+void add_neighbor(GrapfP G, u32 neighbor, int pos)
+{
+    printf("chequeo grado %u\n", G->vertex_array[pos].grado);
+    if (G->vertex_array[pos].grado == 0)
+    {
         printf("entro if\n");
-        G->content[pos].vecinos = calloc(1, sizeof(u32));
-    }else{
-        u32 grado_aux = G->content[pos].grado;
-        G->content[pos].vecinos = realloc(G->content[pos].vecinos, (grado_aux+1)*sizeof(u32));
+        G->vertex_array[pos].vecinos = calloc(1, sizeof(u32));
     }
-    G->content[pos].vecinos[G->content[pos].grado] = neighbor;
-    G->content[pos].grado += 1;
+    else
+    {
+        u32 grado_aux = G->vertex_array[pos].grado;
+        G->vertex_array[pos].vecinos = realloc(G->vertex_array[pos].vecinos, (grado_aux+1)*sizeof(u32));
+    }
+    
+    G->vertex_array[pos].vecinos[G->vertex_array[pos].grado] = neighbor;
+    G->vertex_array[pos].grado += 1;
     printf("listo agregueee!!!\n");
 }
 
@@ -119,13 +132,16 @@ void add_neighbor(GrapfP G, u32 neighbor, int pos){
 //-----------------------------------------------------------------------------
 //                          ESTRUCTURA DIMACS (Falta Modificar)
 //-----------------------------------------------------------------------------
-static inline char *_non_empty_line(FILE *fd) {
+static inline char *_non_empty_line(FILE *fd)
+{
     assert(fd != NULL);
     char *line = readline(fd);
-    while (strlen(line) == 0){
+    while (strlen(line) == 0)
+    {
         free(line);
         line = readline(fd);
     }
+
     return(line);
 }
 
@@ -154,7 +170,7 @@ int LeerGrafo(GrapfP G)
 
     scan_result = sscanf(line, "p edge %u %u\n", &vertex_count, &edges_count);
 
-    G->content = calloc(vertex_count, sizeof(Vertex));
+    G->vertex_array = calloc(vertex_count, sizeof(Vertex));
 
     free(line);
     
@@ -175,19 +191,28 @@ int LeerGrafo(GrapfP G)
         if (left == right || scan_result != 2)
         {
             return -1;
-        }else{
+        }
+        else
+        {
             pos1 = add_translation_table(G, left);
-            if(pos1 == -1){
+            
+            if(pos1 == -1)
+            {
                 pos1 = table_count-1;
             }
+            
             pos2 = add_translation_table(G, right);
-            if(pos2 == -1){
+            
+            if(pos2 == -1)
+            {
                 pos2 = table_count-1;
             }
+            
             printf("pos1 %i\n", pos1);
             printf("pos2 %i\n", pos2);
             add_neighbor(G, right, pos1);
             add_neighbor(G, left, pos2);
+            
             }
     }
 

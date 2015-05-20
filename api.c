@@ -28,7 +28,7 @@ struct GrafoPlus
 
 
 
-u32 *translation_table;
+u32 *translation_table = NULL;
 u32 table_count = 0;
 
 //-----------------------------------------------------------------------------
@@ -69,27 +69,31 @@ int add_translation_table(GrapfP G, u32 vertex){
     int i = 0;
     if(translation_table == NULL)
     {
+        printf("creo la tablaaa\n");
         translation_table = calloc(G->vertex_count, sizeof(u32));
     }
+    printf("table count es %u\n", table_count);
     while(i<table_count && !exist) {
+        printf("pitaaaaaaaa\n");
         exist = (translation_table[i] == vertex);
         i++;
     }
     if(!exist){
         translation_table[table_count] = vertex;
+        printf("acabo de agregarlooo a translation_table\n");
+        G->content[table_count].grado = 0;
         table_count += 1;
         return -1;
     }else{
-        return i;
+        return i-1;
     }
 }
 
 void add_neighbor(GrapfP G, u32 neighbor, int pos){
-    printf("chequeo grado\n");
+    printf("chequeo grado %u\n", G->content[pos].grado);
     if (G->content[pos].grado == 0) {
         printf("entro if\n");
         G->content[pos].vecinos = calloc(1, sizeof(u32));
-        ;
     }else{
         u32 grado_aux = G->content[pos].grado;
         G->content[pos].vecinos = realloc(G->content[pos].vecinos, (grado_aux+1)*sizeof(u32));
@@ -161,32 +165,22 @@ int LeerGrafo(GrapfP G)
         {
             return -1;
         }else{
-            printf("table es %u\n", table_count);
             pos1 = add_translation_table(G, left);
-            printf("ahora es %u\n", table_count);
-            if(pos1 < 0){
-                printf("entro if pos\n");
-                G->content[table_count-1].grado = 0;
+            if(pos1 == -1){
                 pos1 = table_count-1;
-                printf("salgo if pos\n");
             }
-            printf("table2 es %u\n", table_count);
             pos2 = add_translation_table(G, right);
-            printf("ahora2 es %u\n", table_count);
-            printf("pos2 es %i\n", pos2);
             if(pos2 == -1){
-                printf("entro if 2 pos\n");
-                printf("table-1 es %u\n", table_count-1);
-                G->content[table_count-1].grado = 0;
                 pos2 = table_count-1;
-                printf("salgo if 2 pos\n");
             }
+            printf("pos1 %i\n", pos1);
+            printf("pos2 %i\n", pos2);
             add_neighbor(G, right, pos1);
             add_neighbor(G, left, pos2);
             }
     }
 
-        free(line);
+    free(line);
 
     G->vertex_count = vertex_count;
     G->edges_count = edges_count;

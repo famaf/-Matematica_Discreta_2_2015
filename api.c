@@ -7,6 +7,12 @@
 #include "helpers.h"
 #include "api.h"
 
+struct Campos_Auxiliares
+{
+    u32 grado; // Grado del vertice
+    u32 *vecinos; // Arreglo de vecinos
+    u32 color; // Color del vertice
+} CamAux;
 
 struct GrafoPlus
 {
@@ -15,17 +21,11 @@ struct GrafoPlus
     u32 color_count; // Cantidad de colores del grafo --> "X(G)"
     //u32 orden_ingresado[vertex_count]; // Orden en que se ingresaron los vertices
     //u32 grado_x_vertice[vertex_count]; // Grado (cantidad de vecinos) por vertice
-    CamAux content[vertex_count]; // Estructura que contiene el ID del vertice, sus vecinos
+    Vertex *content; // Estructura que contiene el ID del vertice, sus vecinos
                                                // en un arreglo, y el color del vertice.
 } GrafoSt;
 
 
-struct Campos_Auxiliares
-{
-    u32 grado; // Grado del vertice
-    u32 *vecinos; // Arreglo de vecinos
-    u32 color; // Color del vertice
-} CamAux;
 
 
 u32 *translation_table;
@@ -64,12 +64,12 @@ int DestruirGraf(GrapfP G)
     // LIBERA MEMORIA ALOCADA DE LA ESTRUCTURA
 }
 
-u32 add_translation_table(u32 vertex){
+u32 add_translation_table(GrapfP G, u32 vertex){
     bool exist = false;
     u32 i = 0;
     if(translation_table == NULL)
     {
-        translation_table= calloc(1, vertex_count*sizeof(u32));
+        translation_table = calloc(G->vertex_count, sizeof(u32));
     }
     while(i<table_count && !exist) {
         exist = (translation_table[i] == vertex);
@@ -89,11 +89,13 @@ void add_neighbor(GrapfP G, u32 neighbor, u32 pos){
     if (G->content[pos]->vecinos == NULL) {
         G->content[pos]->vecinos = calloc(1, sizeof(u32));
     }else{
-        G->content[pos]->vecinos = realloc(G->content[pos]->vecinos[grado_aux], (grado_aux+1)*sizeof(u32));
+        G->content[pos]->vecinos = realloc(G->content[pos]->vecinos, (grado_aux+1)*sizeof(u32));
     }
     G->content[pos]->vecinos[grado_aux] = neighbor;
     G->content[pos]->grado += 1;
 }
+
+
 
 //-----------------------------------------------------------------------------
 //                          ESTRUCTURA DIMACS (Falta Modificar)
@@ -132,7 +134,9 @@ int LeerGrafo(GrapfP G)
     /* Segunda Linea: Debe contener cantidad de vértices y lados */
 
     scan_result = sscanf(line, "p edge %u %u\n", &vertex_count, &edges_count);
-    
+
+    G->content = calloc(vertex_count, sizeof(u32));
+
     free(line);
     
     if (scan_result != 2)
@@ -153,8 +157,8 @@ int LeerGrafo(GrapfP G)
         {
             return -1;
         }else{
-            pos1 = add_translation_table(left);
-            pos2 = add_translation_table(right);
+            pos1 = add_translation_table(G, left);
+            pos2 = add_translation_table(G, right);
             add_neighbor(G, right, pos1);
             add_neighbor(G, left, pos2);
             }

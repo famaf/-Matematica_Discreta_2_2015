@@ -53,12 +53,23 @@ GrapfP NuevoGraf()
 
 int DestruirGraf(GrapfP G)
 {
+    int i = 0;
+    u32 j = 0;
+
     if(G == NULL)
     {
         return 0;
     }
-
+    for(i;i<G->vertex_count;i++){
+        // j = G->content[i].grado;
+        // for(j;j>0;j--){
+        //     free(G->content[i].vecinos[j]);
+        // }
+        free(G->content[i].vecinos);
+    }
+    free(G->content);
     free(G);
+    free(translation_table);
 
     return 1;
     // LIBERA MEMORIA ALOCADA DE LA ESTRUCTURA

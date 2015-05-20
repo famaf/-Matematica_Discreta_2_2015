@@ -9,6 +9,7 @@
 
 struct Vertex_Data
 {
+    u32 id;
     u32 grado; // Grado del vertice
     u32 *vecinos; // Arreglo de vecinos
     u32 color; // Color del vertice
@@ -26,10 +27,7 @@ struct GrafoPlus
 } GrafoSt;
 
 
-
-
-u32 *translation_table = NULL;
-u32 table_count = 0;
+u32 id_count = 0;
 
 //-----------------------------------------------------------------------------
 GrapfP NuevoGraf()
@@ -54,52 +52,41 @@ GrapfP NuevoGraf()
 
 int DestruirGraf(GrapfP G)
 {
-    int i = 0;
+    u32 i = G->vertex_count;
     u32 j = 0;
 
     if(G == NULL)
     {
         return 0;
     }
-    for(i;i<G->vertex_count;i++){
-        // j = G->vertex_array[i].grado;
-        // for(j;j>0;j--){
-        //     free(G->vertex_array[i].vecinos[j]);
-        // }
+    for(i;i>0;i--){
         free(G->vertex_array[i].vecinos);
     }
     free(G->vertex_array);
     free(G);
-    free(translation_table);
 
     return 1;
     // LIBERA MEMORIA ALOCADA DE LA ESTRUCTURA
 }
 
-int add_translation_table(GrapfP G, u32 vertex)
+u32 add_vertex_id(GrapfP G, u32 vertex)
 {
     bool exist = false;
     int i = 0;
 
-    if(translation_table == NULL)
+    while(i<id_count && !exist)
     {
-        printf("creo la tablaaa\n");
-        translation_table = calloc(G->vertex_count, sizeof(u32));
-    }
-    printf("table count es %u\n", table_count);
-    while(i<table_count && !exist)
-    {
-        printf("pitaaaaaaaa\n");
-        exist = (translation_table[i] == vertex);
+        exist = (G->vertex_array[i].id == vertex);
         i++;
     }
-    
+
     if(!exist)
     {
-        translation_table[table_count] = vertex;
-        printf("acabo de agregarlooo a translation_table\n");
-        G->vertex_array[table_count].grado = 0;
-        table_count += 1;
+        G->vertex_array[i].id = vertex;
+        printf("acabo de agregar id\n");
+        G->vertex_array[i].grado = 0;
+        G->vertex_array[i].color = i;
+        id_count += 1;
         return -1;
     }
     else
@@ -194,18 +181,18 @@ int LeerGrafo(GrapfP G)
         }
         else
         {
-            pos1 = add_translation_table(G, left);
+            pos1 = add_vertex_id(G, left);
             
             if(pos1 == -1)
             {
-                pos1 = table_count-1;
+                pos1 = id_count-1;
             }
             
-            pos2 = add_translation_table(G, right);
+            pos2 = add_vertex_id(G, right);
             
             if(pos2 == -1)
             {
-                pos2 = table_count-1;
+                pos2 = id_count-1;
             }
             
             printf("pos1 %i\n", pos1);
@@ -220,26 +207,61 @@ int LeerGrafo(GrapfP G)
 
     G->vertex_count = vertex_count;
     G->edges_count = edges_count;
+    G->color_count = vertex_count;
 
     return vertex_count;
 }
 //-----------------------------------------------------------------------------
 
-/*int ImprimirGrafo(GrapfP G)
+int ImprimirGrafo(GrapfP G)
 {
-    // IMPLEMENTAR
+    u32 i = G->vertex_count;
+    u32 grado_aux;
+    printf("p edge %u %u\n", i, G->edges_count);
+    for(i;i>0;i--){
+        grado_aux = G->vertex_array[i].grado;
+        for(grado_aux;grado_aux>0;grado_aux--){
+            printf("e %u %u\n", G->vertex_array[i].id, G->vertex_array[i].vecinos[grado_aux]);
+        }
+    }
 }
-
-
-int ImprimirColor(GrapfP G, u32 i)
-{
-    // IMPLEMENTAR
-}
-
 
 u32 CantidadDeColores(GrapfP G)
 {
+    return G->color_count;
+}
 
-}*/
-//-----------------------------------------------------------------------------
+u32 NumeroVerticesDeColor(GrapfP G, u32 i){
+
+    u32 cant_color = 0;
+    u32 j = 0;
+
+    for(j;j<G->vertex_count;j++){
+        if(G->vertex_array[j].color == i){
+            cant_color += 1;
+        }
+    }
+    return cant_color;
+}
+
+
+int ImprimirColor(GrapfP G, u32 i){
+
+}
+
+
+u32 Greedy(GrapfP G){
+    u32 current_color = 1;
+    
+}
+
+
+
+
+
+
+
+
+
+
 

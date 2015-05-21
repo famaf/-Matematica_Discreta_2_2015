@@ -17,11 +17,13 @@ int main()
 
     printf("Cantidad de colores usados: %u\n", CantidadDeColores(grafo));
 
-    ImprimirColor(grafo, 4);
+    //ImprimirColor(grafo, 4);
 
     printf ("NumeroVerticesDeColor x =     %u\n", NumeroVerticesDeColor(grafo, 488));
 
     printf("DESPUES DE LeerGraf y ANTES DE DestruirGraf\n");
+
+    printf("la cantidad de colores es %u\n", Greedy(grafo));
 
     DestruirGraf(grafo);
 

@@ -312,77 +312,67 @@ int ImprimirGrafo(GrapfP G)
     }
 }
 
-
 u32 CantidadDeColores(GrapfP G)
 {
     return G->color_count;
 }
 
+u32 NumeroVerticesDeColor(GrapfP G, u32 i){
 
-u32 NumeroVerticesDeColor(GrapfP G, u32 i)
-{
+    u32 cant_color = 0;
+    u32 j = 0;
 
-    u32 cantidad_vertex_color = 0;
-    u32 iterator = 0;
-
-    for(iterator; iterator < G->vertex_count; iterator++)
+    for(j; j<G->vertex_count; j++)
     {
-        if(G->vertex_array[iterator].color == i)
+        if(G->vertex_array[j].color == i)
         {
-            cantidad_vertex_color ++;;
+            cant_color += 1;
         }
     }
-
-    return cantidad_vertex_color;
+    return cant_color;
 }
 
 
-u32 ImprimirColor(GrapfP G, u32 i)
+
+u32 Greedy(GrapfP G)
 {
-    u32 iterator = 0;
-    u32 cantidad_vertex_color = 0;
-    bool find = false;
-    for (iterator; iterator < G->vertex_count; iterator++)
+    u32 i = 0;
+    u32 j = 0;
+    u32 current_color = 1;
+    u32 grado_aux = 0;
+    u32 max_color = 0;
+
+    G->vertex_array[0].color = 1;
+
+    for(i=1;i < G->vertex_count; i++)
     {
-        if (G->vertex_array[iterator].color == i)
+        G->vertex_array[i].color = 0;
+    }
+
+    for(i=1;i < G->vertex_count; i++)
+    {
+        current_color = 1;
+        grado_aux = G->vertex_array[i].grado;
+
+        for(j=0;j<grado_aux;j++)
         {
-            if (!find)
+            if(current_color == G->vertex_array[G->vertex_array[i].vecinos[j]].color)
             {
-                printf("Vertices de Color %u: ", i);
-                printf("%u", G->vertex_array[iterator].id);
+                current_color += 1;
+                printf("current_color %u\n", current_color);
             }
-            else
-            {
-                printf(", %u", G->vertex_array[iterator].id);
-            }
-            
-            find = true;
-            cantidad_vertex_color ++;
+        }
+
+        G->vertex_array[i].color = current_color;
+
+        if(max_color < current_color)
+        {
+            max_color = current_color;
         }
     }
 
-    if (!find)
-    {
-        printf("No hay vertices de color %u", i);
-    }
-
-    printf(".\n");
-
-    return cantidad_vertex_color;
+    return max_color;
 }
-
-
-// u32 Greedy(GrapfP G)
-// {
-//     u32 current_color = 1;
-//     for(i=0;i < G->vertex_count; i++)
-//     {
-//         for(j=i;j>0;j--)
-//         {
-
-//         }
-//     }
-// }
 
 
 

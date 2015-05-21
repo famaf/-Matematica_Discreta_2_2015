@@ -312,32 +312,65 @@ int ImprimirGrafo(GrapfP G)
     }
 }
 
+
 u32 CantidadDeColores(GrapfP G)
 {
     return G->color_count;
 }
 
-u32 NumeroVerticesDeColor(GrapfP G, u32 i){
 
-    u32 cant_color = 0;
-    u32 j = 0;
-
-    for(j; j<G->vertex_count; j++)
-    {
-        if(G->vertex_array[j].color == i)
-        {
-            cant_color += 1;
-        }
-    }
-    return cant_color;
-}
-
-
-/*int ImprimirColor(GrapfP G, u32 i)
+u32 NumeroVerticesDeColor(GrapfP G, u32 i)
 {
 
+    u32 cantidad_vertex_color = 0;
+    u32 iterator = 0;
+
+    for(iterator; iterator < G->vertex_count; iterator++)
+    {
+        if(G->vertex_array[iterator].color == i)
+        {
+            cantidad_vertex_color ++;;
+        }
+    }
+
+    return cantidad_vertex_color;
 }
-*/
+
+
+u32 ImprimirColor(GrapfP G, u32 i)
+{
+    u32 iterator = 0;
+    u32 cantidad_vertex_color = 0;
+    bool find = false;
+    for (iterator; iterator < G->vertex_count; iterator++)
+    {
+        if (G->vertex_array[iterator].color == i)
+        {
+            if (!find)
+            {
+                printf("Vertices de Color %u: ", i);
+                printf("%u", G->vertex_array[iterator].id);
+            }
+            else
+            {
+                printf(", %u", G->vertex_array[iterator].id);
+            }
+            
+            find = true;
+            cantidad_vertex_color ++;
+        }
+    }
+
+    if (!find)
+    {
+        printf("No hay vertices de color %u", i);
+    }
+
+    printf(".\n");
+
+    return cantidad_vertex_color;
+}
+
 
 // u32 Greedy(GrapfP G)
 // {

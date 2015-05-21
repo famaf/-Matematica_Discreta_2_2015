@@ -4,6 +4,7 @@
 
 int main()
 {
+    u32 mario;
     printf("ANTES DE NuevoGraf\n");
 
     GrapfP grafo = NuevoGraf();
@@ -12,7 +13,13 @@ int main()
 
     LeerGrafo(grafo);
 
-    ImprimirGrafo(grafo);
+    //ImprimirGrafo(grafo);
+
+    printf("Cantidad de colores usados: %u\n", CantidadDeColores(grafo));
+
+    ImprimirColor(grafo, 4);
+
+    printf ("NumeroVerticesDeColor x =     %u\n", NumeroVerticesDeColor(grafo, 488));
 
     printf("DESPUES DE LeerGraf y ANTES DE DestruirGraf\n");
 

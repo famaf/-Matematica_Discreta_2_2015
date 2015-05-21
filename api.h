@@ -24,14 +24,14 @@ int LeerGrafo(GrapfP G);
 
 u32 CantidadDeColores(GrapfP G);
 
-u32 NumeroVerticesDeColor(GrapfP G, u32 i);
+//u32 NumeroVerticesDeColor(GrapfP G, u32 i);
 
-/*int ImprimirGrafo(GrapfP G);
-
-
-int ImprimirColor(GrapfP G, u32 i);
+int ImprimirGrafo(GrapfP G);
 
 
+//int ImprimirColor(GrapfP G, u32 i);
 
-*/
+
+
+
 #endif

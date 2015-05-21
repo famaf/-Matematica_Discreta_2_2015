@@ -5,7 +5,7 @@
 #include <string.h>
 #include "helpers.h"
 
-#define BUFFER_SIZE 128
+#define BUFFER_SIZE 80
 
 
 char *readline(FILE *file) {

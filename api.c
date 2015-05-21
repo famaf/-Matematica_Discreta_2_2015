@@ -285,26 +285,28 @@ int ImprimirGrafo(GrapfP G)
 {
     u32 i = 0;
     u32 j = 0;
+    u32 k = 0;
     u32 grado_aux;
-    bool impreso = false;
+    bool impreso;
 
     printf("p edge %u %u\n", G->vertex_count, G->edges_count);
     for(i=0 ;i < G->vertex_count; i++)
     {
         grado_aux = G->vertex_array[i].grado;
-        for(grado_aux; grado_aux > 0; grado_aux--)
+        for(k=0;k<grado_aux;k++)
         {
-            for(j=0;j<i;j++){
-                if(G->vertex_array[i].id == G->vertex_array[j].vecinos[grado_aux]){
-                    printf("lado %u %u ya ha sido agregado\n", G->vertex_array[j].id, G->vertex_array[i].vecinos[grado_aux]);
+            impreso = false;
+            j = 0;
+            while(j<i && !impreso)
+            {
+                if(j == G->vertex_array[i].vecinos[k]){
                     impreso = true;
-                    break;
                 }
+                j++;
             }
             if(!impreso){
-                printf("e %u %u\n", G->vertex_array[i].id, G->vertex_array[i].vecinos[grado_aux]);
+                printf("e %u %u\n", G->vertex_array[i].id, G->vertex_array[G->vertex_array[i].vecinos[k]].id);
             }
-
         }
 
     }
@@ -344,7 +346,7 @@ u32 NumeroVerticesDeColor(GrapfP G, u32 i){
 //     {
 //         for(j=i;j>0;j--)
 //         {
-            
+
 //         }
 //     }
 // }

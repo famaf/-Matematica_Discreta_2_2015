@@ -95,47 +95,53 @@ void add_vertex_id_color_grado(GrapfP G, u32 vertex)
     }
 }
 
+// Guardamos en vecinos la posición en donde está el vértice vecino.
 void add_vecino(GrapfP G, u32 vertex_1, u32 vertex_2)
 {
-    bool existe = true;
+    bool existe = false;
+    bool find1 = false;
+    bool find2 = false;
     unsigned int i = 0;
     unsigned int j = 0;
-    //printf("--------------------------------------\n");
-    //printf("        vertex_1 = %u ------ vertex_2 = %u\n", vertex_1, vertex_2);
-    while (i < G->vertex_count && existe)
+    u32 pos1 = 0;
+    u32 pos2 = 0;
+
+    while (i < G->vertex_count && !(find1 && find2))
     {
-        //printf("HOLA 1\n");
-        //printf("        i  = %u\n", i);
-        //printf("        Grado de %u = %u\n", G->vertex_array[i].id, G->vertex_array[i].grado);
-        //printf("        %u == %u\n", G->vertex_array[i].id, vertex_1);
         if (G->vertex_array[i].id == vertex_1)
         {
-
-            //printf("HOLA 2\n");
-            while (j < G->vertex_array[i].grado && existe)
-            {
-                //printf("HOLA 3\n");
-                if (G->vertex_array[i].vecinos[j] != 0)
-                {
-                    //printf("HOLA 4\n");
-                    j++;
-                }
-                else
-                {
-                    //printf("HOLA 5\n");
-                    G->vertex_array[i].vecinos[j] = vertex_2;
-                    existe = false;
-                }
-            }
+            pos1 = i;
+            find1 = true;
         }
-        else
+        if(G->vertex_array[i].id == vertex_2)
         {
-            //printf("HOLA 6\n");
-            i++;
+            pos2 = i;
+            find2 = true;
         }
+        i++;
     }
-    //printf("HOLA 7\n");
-    //printf("--------------------------------------\n");
+
+    while (j < G->vertex_array[pos1].grado && !existe)
+    {
+        if (G->vertex_array[pos1].vecinos[j] == 0)
+        {
+            G->vertex_array[pos1].vecinos[j] = pos2;
+            existe = true;
+        }
+        j++;
+    }
+
+    j = 0;
+    existe = false;
+    while (j < G->vertex_array[pos2].grado && !existe)
+    {
+        if (G->vertex_array[pos2].vecinos[j] == 0)
+        {
+            G->vertex_array[pos2].vecinos[j] = pos1;
+            existe = true;
+        }
+        j++;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -153,7 +159,6 @@ static inline char *_non_empty_line(FILE *fd)
 
     return(line);
 }
-
 
 int LeerGrafo(GrapfP G) 
 {
@@ -259,18 +264,16 @@ int LeerGrafo(GrapfP G)
         scan_result = sscanf(line, "e %u %u", &left, &right);
 
         add_vecino(G, left, right);
-        add_vecino(G, right, left);
-
     }
 
-/*    for(unsigned int j = 0; j < G->vertex_count; j++)
-    {
-        printf("Vertice: '%u', grado = %u\n", G->vertex_array[j].id, G->vertex_array[j].grado);
-        for(unsigned int t = 0; t < G->vertex_array[j].grado; t++)
-        {
-            printf("    los vecinos de el vertice '%u': %u\n", G->vertex_array[j].id, G->vertex_array[j].vecinos[t]);
-        }
-    }*/
+    // for(unsigned int j = 0; j < G->vertex_count; j++)
+    // {
+    //     printf("Vertice: '%u', grado = %u\n", G->vertex_array[j].id, G->vertex_array[j].grado);
+    //     for(unsigned int t = 0; t < G->vertex_array[j].grado; t++)
+    //     {
+    //         printf("    los vecinos de el vertice '%u': %u\n", G->vertex_array[j].id, G->vertex_array[G->vertex_array[j].vecinos[t]].id);
+    //     }
+    // }
 
     free(line);
 
@@ -280,17 +283,30 @@ int LeerGrafo(GrapfP G)
 
 int ImprimirGrafo(GrapfP G)
 {
-    u32 i = G->vertex_count;
+    u32 i = 0;
+    u32 j = 0;
     u32 grado_aux;
-    printf("p edge %u %u\n", i, G->edges_count);
-    for(i ;i > 0; i--)
+    bool impreso = false;
+
+    printf("p edge %u %u\n", G->vertex_count, G->edges_count);
+    for(i=0 ;i < G->vertex_count; i++)
     {
         grado_aux = G->vertex_array[i].grado;
-        
         for(grado_aux; grado_aux > 0; grado_aux--)
         {
-            printf("e %u %u\n", G->vertex_array[i].id, G->vertex_array[i].vecinos[grado_aux]);
+            for(j=0;j<i;j++){
+                if(G->vertex_array[i].id == G->vertex_array[j].vecinos[grado_aux]){
+                    printf("lado %u %u ya ha sido agregado\n", G->vertex_array[j].id, G->vertex_array[i].vecinos[grado_aux]);
+                    impreso = true;
+                    break;
+                }
+            }
+            if(!impreso){
+                printf("e %u %u\n", G->vertex_array[i].id, G->vertex_array[i].vecinos[grado_aux]);
+            }
+
         }
+
     }
 }
 
@@ -299,20 +315,20 @@ u32 CantidadDeColores(GrapfP G)
     return G->color_count;
 }
 
-// u32 NumeroVerticesDeColor(GrapfP G, u32 i){
+u32 NumeroVerticesDeColor(GrapfP G, u32 i){
 
-//     u32 cant_color = 0;
-//     u32 j = 0;
+    u32 cant_color = 0;
+    u32 j = 0;
 
-//     for(j; j<G->vertex_count; j++)
-//     {
-//         if(G->vertex_array[j].color == i)
-//         {
-//             cant_color += 1;
-//         }
-//     }
-//     return cant_color;
-// }
+    for(j; j<G->vertex_count; j++)
+    {
+        if(G->vertex_array[j].color == i)
+        {
+            cant_color += 1;
+        }
+    }
+    return cant_color;
+}
 
 
 /*int ImprimirColor(GrapfP G, u32 i)
@@ -321,12 +337,18 @@ u32 CantidadDeColores(GrapfP G)
 }
 */
 
-/*u32 Greedy(GrapfP G)
-{
-    u32 current_color = 1;
-    
-}
-*/
+// u32 Greedy(GrapfP G)
+// {
+//     u32 current_color = 1;
+//     for(i=0;i < G->vertex_count; i++)
+//     {
+//         for(j=i;j>0;j--)
+//         {
+            
+//         }
+//     }
+// }
+
 
 
 

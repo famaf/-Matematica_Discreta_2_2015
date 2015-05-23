@@ -339,12 +339,13 @@ u32 Greedy(GrapfP G)
 
     for(i=1;i < G->vertex_count; i++)
     {
+        j = 0;
         current_color = 1;
         grado_aux = G->vertex_array[i].grado;
-
-        for(j=0;j<grado_aux;j++)
+        while(j<grado_aux)
         {
-            if(current_color == G->vertex_array[G->vertex_array[i].vecinos[j]].color)
+            j++;
+            if(current_color == G->vertex_array[G->vertex_array[i].vecinos[j-1]].color)
             {
                 current_color += 1;
                 j = 0;

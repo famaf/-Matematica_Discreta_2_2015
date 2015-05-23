@@ -284,10 +284,8 @@ int LeerGrafo(GrapfP G)
 int ImprimirGrafo(GrapfP G)
 {
     u32 i = 0;
-    u32 j = 0;
     u32 k = 0;
-    u32 grado_aux;
-    bool impreso;
+    u32 grado_aux = 0;
 
     printf("p edge %u %u\n", G->vertex_count, G->edges_count);
     for(i=0 ;i < G->vertex_count; i++)
@@ -295,20 +293,10 @@ int ImprimirGrafo(GrapfP G)
         grado_aux = G->vertex_array[i].grado;
         for(k=0;k<grado_aux;k++)
         {
-            impreso = false;
-            j = 0;
-            while(j<i && !impreso)
-            {
-                if(j == G->vertex_array[i].vecinos[k]){
-                    impreso = true;
-                }
-                j++;
-            }
-            if(!impreso){
+            if(G->vertex_array[i].vecinos[k] > i){
                 printf("e %u %u\n", G->vertex_array[i].id, G->vertex_array[G->vertex_array[i].vecinos[k]].id);
             }
         }
-
     }
 }
 
@@ -359,7 +347,7 @@ u32 Greedy(GrapfP G)
             if(current_color == G->vertex_array[G->vertex_array[i].vecinos[j]].color)
             {
                 current_color += 1;
-                printf("current_color %u\n", current_color);
+                j = 0;
             }
         }
 
@@ -370,6 +358,8 @@ u32 Greedy(GrapfP G)
             max_color = current_color;
         }
     }
+
+    G->color_count = max_color;
 
     return max_color;
 }

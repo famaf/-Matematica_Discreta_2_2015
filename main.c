@@ -17,9 +17,9 @@ int main()
 
     printf("Cantidad de colores usados: %u\n", CantidadDeColores(grafo));
 
-    //ImprimirColor(grafo, 4);
+    ImprimirColor(grafo, 433);
 
-    printf ("NumeroVerticesDeColor x =     %u\n", NumeroVerticesDeColor(grafo, 488));
+    printf ("NumeroVerticesDeColor x = %u\n", NumeroVerticesDeColor(grafo, 488));
 
     printf("DESPUES DE LeerGraf y ANTES DE DestruirGraf\n");
 

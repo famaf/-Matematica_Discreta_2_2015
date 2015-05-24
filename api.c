@@ -233,9 +233,9 @@ int LeerGrafo(GrapfP G)
 
     free(line);
 
-    printf("Antes de fseek\n");
+    //printf("Antes de fseek\n");
     fseek(fd, 0, 0); // Vuelvo a principio de archivo
-    printf("Despues de fseek\n");
+    //printf("Despues de fseek\n");
 //---------------------SEGUNDA RECORIDA ----------------------------------
 
     line = _non_empty_line(fd); 
@@ -288,12 +288,15 @@ int ImprimirGrafo(GrapfP G)
     u32 grado_aux = 0;
 
     printf("p edge %u %u\n", G->vertex_count, G->edges_count);
-    for(i=0 ;i < G->vertex_count; i++)
+    
+    for(i = 0; i < G->vertex_count; i++)
     {
         grado_aux = G->vertex_array[i].grado;
+        
         for(k=0;k<grado_aux;k++)
         {
-            if(G->vertex_array[i].vecinos[k] > i){
+            if(G->vertex_array[i].vecinos[k] > i)
+            {
                 printf("e %u %u\n", G->vertex_array[i].id, G->vertex_array[G->vertex_array[i].vecinos[k]].id);
             }
         }
@@ -321,6 +324,42 @@ u32 NumeroVerticesDeColor(GrapfP G, u32 i){
 }
 
 
+u32 ImprimirColor(GrapfP G, u32 i)
+{
+    u32 iterator = 0;
+    u32 cantidad_vertex_color = 0;
+    bool find = false;
+
+    for (iterator; iterator < G->vertex_count; iterator++)
+    {
+        if (G->vertex_array[iterator].color == i)
+        {
+            if (!find)
+            {
+                printf("Vertices de Color %u: ", i);
+                printf("%u", G->vertex_array[iterator].id);
+            }
+            else
+            {
+                printf(", %u", G->vertex_array[iterator].id);
+            }
+            
+            find = true;
+            cantidad_vertex_color ++;
+        }
+    }
+
+    if (!find)
+    {
+        printf("No hay vertices de color %u", i);
+    }
+
+    printf(".\n");
+
+    return cantidad_vertex_color;
+}
+
+
 
 u32 Greedy(GrapfP G)
 {
@@ -332,26 +371,28 @@ u32 Greedy(GrapfP G)
 
     G->vertex_array[0].color = 1;
 
-    for(i=1;i < G->vertex_count; i++)
+    for(i = 1; i < G->vertex_count; i++)
     {
         G->vertex_array[i].color = 0;
     }
 
-    for(i=1;i < G->vertex_count; i++)
+    for(i = 1; i < G->vertex_count; i++)
     {
         j = 0;
         current_color = 1;
         grado_aux = G->vertex_array[i].grado;
-        while(j<grado_aux)
+        
+        while(j < grado_aux)
         {
             j++;
+
             if(current_color == G->vertex_array[G->vertex_array[i].vecinos[j-1]].color)
             {
-                current_color += 1;
+                current_color++;
                 j = 0;
             }
         }
-
+        
         G->vertex_array[i].color = current_color;
 
         if(max_color < current_color)

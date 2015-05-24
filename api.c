@@ -46,15 +46,14 @@ GrapfP NuevoGraf()
 
 int DestruirGraf(GrapfP G)
 {
-    u32 i = 0;
-    u32 j = 0;
+    u32 i;
 
     if(G == NULL)
     {
         return 0;
     }
     
-    for(i; i < G->vertex_count; i++)
+    for(i = 0; i < G->vertex_count; i++)
     {
         free(G->vertex_array[i].vecinos);
     }
@@ -67,7 +66,24 @@ int DestruirGraf(GrapfP G)
     // LIBERA MEMORIA ALOCADA DE LA ESTRUCTURA
 }
 
+
+void SHOW(GrapfP G)
+{
+    printf("-----------------------------------------\n");
+    for(unsigned int j = 0; j < G->vertex_count; j++)
+    {
+        printf("Vertice: '%u' ==> Grado = %u\n", G->vertex_array[j].id, G->vertex_array[j].grado);
+        for(unsigned int t = 0; t < G->vertex_array[j].grado; t++)
+        {
+            printf("    Los vecinos de el vertice son '%u': %u\n", G->vertex_array[j].id, G->vertex_array[G->vertex_array[j].vecinos[t]].id);
+        }
+    }
+    printf("-----------------------------------------\n");
+}
+
+
 unsigned int contador = 0; // Variable Global que me dice hasta cuanto esta lleno el arreglo vertex_array
+
 
 void add_vertex_id_color_grado(GrapfP G, u32 vertex)
 {
@@ -266,15 +282,6 @@ int LeerGrafo(GrapfP G)
         add_vecino(G, left, right);
     }
 
-    // for(unsigned int j = 0; j < G->vertex_count; j++)
-    // {
-    //     printf("Vertice: '%u', grado = %u\n", G->vertex_array[j].id, G->vertex_array[j].grado);
-    //     for(unsigned int t = 0; t < G->vertex_array[j].grado; t++)
-    //     {
-    //         printf("    los vecinos de el vertice '%u': %u\n", G->vertex_array[j].id, G->vertex_array[G->vertex_array[j].vecinos[t]].id);
-    //     }
-    // }
-
     free(line);
 
     return vertex_count;
@@ -293,7 +300,7 @@ int ImprimirGrafo(GrapfP G)
     {
         grado_aux = G->vertex_array[i].grado;
         
-        for(k=0;k<grado_aux;k++)
+        for(k = 0; k<grado_aux; k++)
         {
             if(G->vertex_array[i].vecinos[k] > i)
             {
@@ -301,23 +308,27 @@ int ImprimirGrafo(GrapfP G)
             }
         }
     }
+
+    return 1;
 }
+
 
 u32 CantidadDeColores(GrapfP G)
 {
     return G->color_count;
 }
 
+
 u32 NumeroVerticesDeColor(GrapfP G, u32 i){
 
     u32 cant_color = 0;
-    u32 j = 0;
+    u32 j;
 
-    for(j; j<G->vertex_count; j++)
+    for(j = 0; j<G->vertex_count; j++)
     {
         if(G->vertex_array[j].color == i)
         {
-            cant_color += 1;
+            cant_color ++;
         }
     }
     return cant_color;
@@ -326,11 +337,11 @@ u32 NumeroVerticesDeColor(GrapfP G, u32 i){
 
 u32 ImprimirColor(GrapfP G, u32 i)
 {
-    u32 iterator = 0;
+    u32 iterator;
     u32 cantidad_vertex_color = 0;
     bool find = false;
 
-    for (iterator; iterator < G->vertex_count; iterator++)
+    for (iterator = 0; iterator < G->vertex_count; iterator++)
     {
         if (G->vertex_array[iterator].color == i)
         {
@@ -407,6 +418,46 @@ u32 Greedy(GrapfP G)
 }
 
 
+void swap(GrapfP G, u32 i, u32 j)
+{
+    Vertex tmp;
+
+    tmp = G->vertex_array[i];
+    G->vertex_array[i] = G->vertex_array[j];
+    G->vertex_array[j] = tmp;
+}
+
+void Bubble_Sort(GrapfP G)
+{
+    u32 i, j;
+    bool swapped;
+
+    swapped = true;
+    i = 0;
+
+    while (swapped && (i + 1 < G->vertex_count))
+    {
+        swapped = false;
+        
+        for (j = G->vertex_count - 1; j > 0; j--)
+        {
+            if (G->vertex_array[j].grado > G->vertex_array[j - 1].grado)
+            {
+                swap(G, j, j - 1);
+                swapped = true;
+            }
+        }
+        i++;
+    }
+}
+
+
+void OrdenWelshPowell(GrapfP G)
+{
+    SHOW(G);
+    Bubble_Sort(G);
+    SHOW(G);
+}
 
 
 

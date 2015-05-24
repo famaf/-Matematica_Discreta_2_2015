@@ -4,26 +4,28 @@
 
 int main()
 {
-    u32 mario;
-    printf("ANTES DE NuevoGraf\n");
+//    u32 mario;
+//    printf("ANTES DE NuevoGraf\n");
 
     GrapfP grafo = NuevoGraf();
 
-    printf("DESPUES DE NuevoGraf y ANTES DE LeerGraf\n");
+//    printf("DESPUES DE NuevoGraf y ANTES DE LeerGraf\n");
 
     LeerGrafo(grafo);
 
     //ImprimirGrafo(grafo);
 
-    printf("Cantidad de colores usados: %u\n", CantidadDeColores(grafo));
+    //printf("Cantidad de colores usados: %u\n", CantidadDeColores(grafo));
 
-    ImprimirColor(grafo, 433);
+    OrdenWelshPowell(grafo);
 
-    printf ("NumeroVerticesDeColor x = %u\n", NumeroVerticesDeColor(grafo, 488));
+    //ImprimirColor(grafo, 433);
 
-    printf("DESPUES DE LeerGraf y ANTES DE DestruirGraf\n");
+    //printf ("NumeroVerticesDeColor x = %u\n", NumeroVerticesDeColor(grafo, 488));
 
-    printf("la cantidad de colores es %u\n", Greedy(grafo));
+    //printf("DESPUES DE LeerGraf y ANTES DE DestruirGraf\n");
+
+    //printf("la cantidad de colores es %u\n", Greedy(grafo));
 
     DestruirGraf(grafo);
 

@@ -36,6 +36,7 @@ u32 ImprimirColor(GrapfP G, u32 i);
 
 u32 Greedy(GrapfP G);
 
+void OrdenWelshPowell(GrapfP G);
 
 
 

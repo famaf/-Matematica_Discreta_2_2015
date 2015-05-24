@@ -4,7 +4,6 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include "helpers.h"
 #include "api.h"
 
 struct Vertex_Data

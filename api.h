@@ -1,6 +1,7 @@
 #ifndef API_H
 #define API_H
 
+
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -10,6 +11,8 @@ typedef uint32_t u32;
 
 
 typedef struct GrafoPlus *GrapfP;
+
+
 typedef struct Vertex_Data Vertex;
 
 
@@ -35,6 +38,7 @@ u32 ImprimirColor(GrapfP G, u32 i);
 
 
 u32 Greedy(GrapfP G);
+
 
 void OrdenWelshPowell(GrapfP G);
 

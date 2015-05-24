@@ -69,11 +69,12 @@ int DestruirGraf(GrapfP G)
 
 void SHOW(GrapfP G)
 {
+    u32 j, t;
     printf("-----------------------------------------\n");
-    for(unsigned int j = 0; j < G->vertex_count; j++)
+    for(j = 0; j < G->vertex_count; j++)
     {
         printf("Vertice: '%u' ==> Grado = %u\n", G->vertex_array[j].id, G->vertex_array[j].grado);
-        for(unsigned int t = 0; t < G->vertex_array[j].grado; t++)
+        for(t = 0; t < G->vertex_array[j].grado; t++)
         {
             printf("    Los vecinos de el vertice son '%u': %u\n", G->vertex_array[j].id, G->vertex_array[G->vertex_array[j].vecinos[t]].id);
         }
@@ -82,13 +83,13 @@ void SHOW(GrapfP G)
 }
 
 
-unsigned int contador = 0; // Variable Global que me dice hasta cuanto esta lleno el arreglo vertex_array
+u32 contador = 0; // Variable Global que me dice hasta cuanto esta lleno el arreglo vertex_array
 
 
 void add_vertex_id_color_grado(GrapfP G, u32 vertex)
 {
     bool existe = false;
-    unsigned int i = 0;
+    u32 i = 0;
     
     while(i < contador && existe == false)
     {
@@ -117,8 +118,8 @@ void add_vecino(GrapfP G, u32 vertex_1, u32 vertex_2)
     bool existe = false;
     bool find1 = false;
     bool find2 = false;
-    unsigned int i = 0;
-    unsigned int j = 0;
+    u32 i = 0;
+    u32 j = 0;
     u32 pos1 = 0;
     u32 pos2 = 0;
 
@@ -149,6 +150,7 @@ void add_vecino(GrapfP G, u32 vertex_1, u32 vertex_2)
 
     j = 0;
     existe = false;
+    
     while (j < G->vertex_array[pos2].grado && !existe)
     {
         if (G->vertex_array[pos2].vecinos[j] == 0)
@@ -163,68 +165,54 @@ void add_vecino(GrapfP G, u32 vertex_1, u32 vertex_2)
 //-----------------------------------------------------------------------------
 //                          ESTRUCTURA DIMACS (Falta Modificar)
 //-----------------------------------------------------------------------------
-static inline char *_non_empty_line(FILE *fd)
-{
-    assert(fd != NULL);
-    char *line = readline(fd);
-    while (strlen(line) == 0)
-    {
-        free(line);
-        line = readline(fd);
-    }
+// static inline char *_non_empty_line(FILE *fd)
+// {
+//     assert(fd != NULL);
+//     char *line = readline(fd);
+//     while (strlen(line) == 0)
+//     {
+//         free(line);
+//         line = readline(fd);
+//     }
 
-    return(line);
-}
+//     return(line);
+// }
 
 int LeerGrafo(GrapfP G) 
 {
-    //assert(fd != NULL);
-    FILE *fd = NULL;
-    fd = stdin;
-    int scan_result = 0;
-    char *line = NULL;
-    u32 vertex_count = 0, edges_count = 0;
+    u32 vertex_count = 0, edges_count = 0; // Varibles con vertices y aristas
+    u32 scan_result;
+    char line; 
+    u32 i = 0;
+    u32 j;
+    u32 k = 0;
+    u32 left, right;
 
-//---------------------PRIMERA RECORIDA ----------------------------------
-
-    line = _non_empty_line(fd); // line es un buffer, sscanf lee los elemento del buffer
-
-    /* Primera(s) Linea: Si empieza con 'c' se ignora y se pasa a la siguiente */
-    while (line[0] == 'c')
+// --------------------------PRIMERA RECORRIDA ----------------------------
+    while (fscanf(stdin, "%c", &line) != EOF && line != 'p')
     {
-        free(line);
-        line = _non_empty_line(fd);
+        while (fscanf(stdin, "%c", &line) != EOF && line != '\n');
     }
 
-    /* Segunda Linea: Debe contener cantidad de vértices y lados */
+    scan_result = fscanf(stdin, "%*s %u %u\n", &vertex_count, &edges_count);
 
-    scan_result = sscanf(line, "p edge %u %u\n", &vertex_count, &edges_count);
-
-    G->vertex_count = vertex_count;
-    //printf("G->vertex_count = %u\n", G->vertex_count);
-    G->edges_count = edges_count;
-    //printf("G->edges_count = %u\n", G->edges_count);
-    G->color_count = vertex_count;
-    //printf("G->color_count = %u\n", G->color_count);
-
-    //printf("Calloc para el tamaño del array de vertice\n");
-    G->vertex_array = calloc(vertex_count, sizeof(Vertex)); // Tamaño del arreglo de Vertex
-
-    free(line);
-    
     if (scan_result != 2)
     {
         return -1;
     }
 
-    /* siguiente linea edges_count debe ser aristas */
-    for (unsigned int i = 0; i < edges_count; i++)
+    G->vertex_count = vertex_count;
+    G->edges_count = edges_count;
+    G->color_count = vertex_count;
+
+    G->vertex_array = calloc(vertex_count, sizeof(Vertex)); // Tamaño del arreglo de Vertex
+
+    while (i < edges_count && scan_result == 2)
     {
-        unsigned int left = 0, right = 0;
+        left = 0;
+        right = 0;
 
-        line = _non_empty_line(fd);
-
-        scan_result = sscanf(line, "e %u %u", &left, &right);
+        scan_result = fscanf(stdin, "\ne %u %u", &left, &right);
 
         if (left == right || scan_result != 2)
         {
@@ -235,63 +223,51 @@ int LeerGrafo(GrapfP G)
             add_vertex_id_color_grado(G, left);
             add_vertex_id_color_grado(G, right);
         }
+
+        i++;
     }
 
-    // Asigno memoria a cada vertice segun su grado;
-    for(unsigned int j = 0; j < G->vertex_count; j++)
+    for(j = 0; j < G->vertex_count; j++)
     {
         G->vertex_array[j].vecinos = calloc(G->vertex_array[j].grado, sizeof(u32));
     }
-/*    for(unsigned int j = 0; j < G->vertex_count; j++)
+// -----------------------------------------------------------------------
+
+    fseek(stdin, 0, 0);
+
+// --------------------------SEGUNDA RECORRIDA ----------------------------
+    while (fscanf(stdin, "%c", &line) != EOF && line != 'p')
     {
-        printf("Vertices que tengo: %u, grado: %u\n", G->vertex_array[j].id, G->vertex_array[j].grado);
-    }*/
-
-    free(line);
-
-    //printf("Antes de fseek\n");
-    fseek(fd, 0, 0); // Vuelvo a principio de archivo
-    //printf("Despues de fseek\n");
-//---------------------SEGUNDA RECORIDA ----------------------------------
-
-    line = _non_empty_line(fd); 
-
-    // Primera(s) Linea: Si empieza con 'c' se ignora y se pasa a la siguiente
-    while (line[0] == 'c')
-    {
-        free(line);
-        line = _non_empty_line(fd);
+        while (fscanf(stdin, "%c", &line) != EOF && line != '\n');
     }
 
-    //free(line);
+    scan_result = fscanf(stdin, "%*s %u %u\n", &vertex_count, &edges_count);
 
-    // Segunda Linea: Debe contener cantidad de vértices y lados
-
-    scan_result = sscanf(line, "p edge %u %u\n", &vertex_count, &edges_count);
-
-    free(line);
-
-    for (unsigned int i = 0; i < edges_count; i++)
+    if (scan_result != 2)
     {
-        unsigned int left = 0, right = 0;
+        return -1;
+    }
 
-        line = _non_empty_line(fd);
+    while (k < edges_count && scan_result == 2)
+    {
+        left = 0;
+        right = 0;
 
-        scan_result = sscanf(line, "e %u %u", &left, &right);
+        scan_result = fscanf(stdin, "\ne %u %u", &left, &right);
 
         add_vecino(G, left, right);
-    }
 
-    free(line);
+        k++;
+    }
+// -----------------------------------------------------------------------
 
     return vertex_count;
 }
-//-----------------------------------------------------------------------------
 
 int ImprimirGrafo(GrapfP G)
 {
-    u32 i = 0;
-    u32 k = 0;
+    u32 i;
+    u32 k;
     u32 grado_aux = 0;
 
     printf("p edge %u %u\n", G->vertex_count, G->edges_count);
@@ -300,7 +276,7 @@ int ImprimirGrafo(GrapfP G)
     {
         grado_aux = G->vertex_array[i].grado;
         
-        for(k = 0; k<grado_aux; k++)
+        for(k = 0; k < grado_aux; k++)
         {
             if(G->vertex_array[i].vecinos[k] > i)
             {
@@ -376,7 +352,7 @@ u32 Greedy(GrapfP G)
 {
     u32 i = 0;
     u32 j = 0;
-    u32 current_color = 1;
+    u32 color_actual = 1;
     u32 grado_aux = 0;
     u32 max_color = 0;
 
@@ -390,25 +366,25 @@ u32 Greedy(GrapfP G)
     for(i = 1; i < G->vertex_count; i++)
     {
         j = 0;
-        current_color = 1;
+        color_actual = 1;
         grado_aux = G->vertex_array[i].grado;
         
         while(j < grado_aux)
         {
             j++;
 
-            if(current_color == G->vertex_array[G->vertex_array[i].vecinos[j-1]].color)
+            if(color_actual == G->vertex_array[G->vertex_array[i].vecinos[j-1]].color)
             {
-                current_color++;
+                color_actual++;
                 j = 0;
             }
         }
         
-        G->vertex_array[i].color = current_color;
+        G->vertex_array[i].color = color_actual;
 
-        if(max_color < current_color)
+        if(max_color < color_actual)
         {
-            max_color = current_color;
+            max_color = color_actual;
         }
     }
 

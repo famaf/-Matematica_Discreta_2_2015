@@ -13,11 +13,11 @@ int main()
 
     LeerGrafo(grafo);
 
-    //ImprimirGrafo(grafo);
+    ImprimirGrafo(grafo);
 
     //printf("Cantidad de colores usados: %u\n", CantidadDeColores(grafo));
 
-    OrdenWelshPowell(grafo);
+    //OrdenWelshPowell(grafo);
 
     //ImprimirColor(grafo, 433);
 

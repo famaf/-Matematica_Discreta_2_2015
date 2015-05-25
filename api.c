@@ -367,7 +367,7 @@ u32 Greedy(GrapfP G)
         j = 0;
         color_actual = 1;
         grado_aux = G->vertex_array[i].grado;
-        
+
         while(j < grado_aux)
         {
             j++;
@@ -378,7 +378,7 @@ u32 Greedy(GrapfP G)
                 j = 0;
             }
         }
-        
+
         G->vertex_array[i].color = color_actual;
 
         if(max_color < color_actual)
@@ -392,6 +392,120 @@ u32 Greedy(GrapfP G)
     return max_color;
 }
 
+u32 DSATUR(GrapfP G){
+
+    u32 i = 0;
+    u32 j = 0;
+    u32 k = 0;
+    u32 max_dsatur = 0;
+    u32 dsatur_aux = 0;
+    u32 dsatur[G->vertex_count];
+    u32 max_grado = 0;
+    u32 grado_aux = 0;
+    u32 empate_dsatur = 0;
+    u32 por_colorear = 0;
+    u32 color_actual = 0;
+    u32 color_max = 0;
+    u32 vecino_j = 0;
+    bool falta_colorear = true;
+    bool no_actualizar_dsatur = false;
+
+    for(i = 0; i < G->vertex_count; i++){
+        dsatur[i] = 0;
+        G->vertex_array[i].color = 0;
+        if(G->vertex_array[i].grado > grado_aux)
+        {
+            max_grado = i;
+            grado_aux = G->vertex_array[i].grado;
+        }
+    }
+
+    G->vertex_array[max_grado].color = 1;
+    for(j=0;j<G->vertex_array[max_grado].grado;j++){
+        dsatur[G->vertex_array[max_grado].vecinos[j]]++;
+    }
+
+
+    dsatur_aux = 1;
+
+    while(falta_colorear){
+
+        for(i = 0;i < G->vertex_count;i++){
+            if(G->vertex_array[i].color == 0){
+                if(dsatur[i] > dsatur_aux){
+                    max_dsatur = i;
+                    dsatur_aux = dsatur[i];
+                }
+            }
+        }
+
+        grado_aux = 0;
+        i = 0;
+        while(i < G->vertex_count && empate_dsatur < 2){
+            if(G->vertex_array[i].color == 0){
+                if(dsatur[i] == dsatur_aux){
+                    empate_dsatur++;
+                    if(G->vertex_array[i].grado > grado_aux){
+                        grado_aux = G->vertex_array[i].grado;
+                        max_grado = i;
+                    }
+                }
+            }
+            i++;
+        }
+
+        if(empate_dsatur >= 2){
+            por_colorear = max_grado;
+        } else{
+            por_colorear = max_dsatur;
+        }
+
+        color_actual = 1;
+        grado_aux = G->vertex_array[por_colorear].grado;
+        j = 0;
+
+        while(j < grado_aux)
+        {
+            j++;
+            if(color_actual == G->vertex_array[G->vertex_array[por_colorear].vecinos[j-1]].color){
+                color_actual++;
+                j = 0;
+            }
+        }
+
+        for(j=0;j<grado_aux;j++){
+            vecino_j = G->vertex_array[por_colorear].vecinos[j];
+            if(G->vertex_array[vecino_j].color == 0){
+                k = 0;
+                while(k<G->vertex_array[vecino_j].grado && no_actualizar_dsatur){
+                    no_actualizar_dsatur = no_actualizar_dsatur || (color_actual == G->vertex_array[G->vertex_array[vecino_j].vecinos[k]].color);
+                    k++;
+                }
+                if(!no_actualizar_dsatur){
+                    dsatur[vecino_j]++;
+                }
+            }
+        }
+
+        for(i=0;i<G->vertex_count;i++){
+            printf("dsatur de %u es %u\n",G->vertex_array[i].id ,dsatur[i]);
+        }
+
+        for(i=0;i<G->vertex_count;i++){
+            falta_colorear = falta_colorear && (G->vertex_array[i].color == 0);
+        }
+
+        G->vertex_array[por_colorear].color = color_actual;
+
+        if(color_max < color_actual){
+            color_max = color_actual;
+        }
+    }
+
+    G->color_count = color_max;
+
+    return color_max;
+}
 
 void swap(GrapfP G, u32 i, u32 j)
 {
@@ -433,12 +547,3 @@ void OrdenWelshPowell(GrapfP G)
     Bubble_Sort(G);
     SHOW(G);
 }
-
-
-
-
-
-
-
-
-

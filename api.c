@@ -429,8 +429,6 @@ u32 DSATUR(GrapfP G){
 
     while(falta_colorear){
 
-        printf("entroooo\n");
-
         dsatur_aux = 1;
         for(i = 0;i < G->vertex_count;i++){
             if(G->vertex_array[i].color == 0){
@@ -455,8 +453,6 @@ u32 DSATUR(GrapfP G){
             }
         }
 
-        printf("max_dsatur %u max_grado %u\n", max_dsatur, max_grado);
-
         if(empate_dsatur >= 2){
             por_colorear = max_grado;
         } else{
@@ -476,8 +472,7 @@ u32 DSATUR(GrapfP G){
             }
         }
 
-        for(j=0;j<grado_aux;j++){
-            printf("guachin\n");
+        for(j=0;j<grado_aux;j++){;
             vecino_j = G->vertex_array[por_colorear].vecinos[j];
             if(G->vertex_array[vecino_j].color == 0){
                 k = 0;
@@ -497,7 +492,6 @@ u32 DSATUR(GrapfP G){
             falta_colorear = falta_colorear || (G->vertex_array[i].color == 0);
             i++;
         }
-        printf("%u con %u\n", G->vertex_array[por_colorear].id, color_actual);
         G->vertex_array[por_colorear].color = color_actual;
 
         if(color_max < color_actual){

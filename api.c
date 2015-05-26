@@ -426,10 +426,12 @@ u32 DSATUR(GrapfP G){
     }
 
 
-    dsatur_aux = 1;
 
     while(falta_colorear){
 
+        printf("entroooo\n");
+
+        dsatur_aux = 1;
         for(i = 0;i < G->vertex_count;i++){
             if(G->vertex_array[i].color == 0){
                 if(dsatur[i] > dsatur_aux){
@@ -440,8 +442,8 @@ u32 DSATUR(GrapfP G){
         }
 
         grado_aux = 0;
-        i = 0;
-        while(i < G->vertex_count && empate_dsatur < 2){
+
+        for(i=0;i < G->vertex_count;i++){
             if(G->vertex_array[i].color == 0){
                 if(dsatur[i] == dsatur_aux){
                     empate_dsatur++;
@@ -451,8 +453,9 @@ u32 DSATUR(GrapfP G){
                     }
                 }
             }
-            i++;
         }
+
+        printf("max_dsatur %u max_grado %u\n", max_dsatur, max_grado);
 
         if(empate_dsatur >= 2){
             por_colorear = max_grado;
@@ -474,6 +477,7 @@ u32 DSATUR(GrapfP G){
         }
 
         for(j=0;j<grado_aux;j++){
+            printf("guachin\n");
             vecino_j = G->vertex_array[por_colorear].vecinos[j];
             if(G->vertex_array[vecino_j].color == 0){
                 k = 0;
@@ -487,14 +491,13 @@ u32 DSATUR(GrapfP G){
             }
         }
 
-        for(i=0;i<G->vertex_count;i++){
-            printf("dsatur de %u es %u\n",G->vertex_array[i].id ,dsatur[i]);
+        i = 0;
+        falta_colorear = false;
+        while(i<G->vertex_count && !falta_colorear){
+            falta_colorear = falta_colorear || (G->vertex_array[i].color == 0);
+            i++;
         }
-
-        for(i=0;i<G->vertex_count;i++){
-            falta_colorear = falta_colorear && (G->vertex_array[i].color == 0);
-        }
-
+        printf("%u con %u\n", G->vertex_array[por_colorear].id, color_actual);
         G->vertex_array[por_colorear].color = color_actual;
 
         if(color_max < color_actual){

@@ -394,18 +394,12 @@ u32 Greedy(GrapfP G)
 
 u32 DSATUR(GrapfP G){
 
-    u32 i = 0;
-    u32 j = 0;
-    u32 k = 0;
-    u32 max_dsatur = 0;
-    u32 dsatur_aux = 0;
+    u32 i,j,k = 0;
+    u32 max_dsatur, dsatur_aux = 0;
     u32 dsatur[G->vertex_count];
-    u32 max_grado = 0;
-    u32 grado_aux = 0;
-    u32 empate_dsatur = 0;
-    u32 por_colorear = 0;
-    u32 color_actual = 0;
-    u32 color_max = 0;
+    u32 max_grado, grado_aux = 0;
+    u32 empate_dsatur, por_colorear = 0;
+    u32 color_actual, color_max = 0;
     u32 vecino_j = 0;
     bool falta_colorear = true;
     bool no_actualizar_dsatur = false;
@@ -425,11 +419,9 @@ u32 DSATUR(GrapfP G){
         dsatur[G->vertex_array[max_grado].vecinos[j]]++;
     }
 
-
-
     while(falta_colorear){
 
-        dsatur_aux = 1;
+        dsatur_aux = 0;
         for(i = 0;i < G->vertex_count;i++){
             if(G->vertex_array[i].color == 0){
                 if(dsatur[i] > dsatur_aux){
@@ -440,7 +432,6 @@ u32 DSATUR(GrapfP G){
         }
 
         grado_aux = 0;
-
         for(i=0;i < G->vertex_count;i++){
             if(G->vertex_array[i].color == 0){
                 if(dsatur[i] == dsatur_aux){
@@ -472,12 +463,13 @@ u32 DSATUR(GrapfP G){
             }
         }
 
-        for(j=0;j<grado_aux;j++){;
+        for(j=0;j<grado_aux;j++){
             vecino_j = G->vertex_array[por_colorear].vecinos[j];
             if(G->vertex_array[vecino_j].color == 0){
                 k = 0;
                 while(k<G->vertex_array[vecino_j].grado && no_actualizar_dsatur){
-                    no_actualizar_dsatur = no_actualizar_dsatur || (color_actual == G->vertex_array[G->vertex_array[vecino_j].vecinos[k]].color);
+                    i = G->vertex_array[G->vertex_array[vecino_j].vecinos[k]].color;
+                    no_actualizar_dsatur = no_actualizar_dsatur || (color_actual == i);
                     k++;
                 }
                 if(!no_actualizar_dsatur){

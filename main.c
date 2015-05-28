@@ -5,7 +5,7 @@
 int main()
 {
 //    u32 mario;
-//    printf("ANTES DE NuevoGraf\n");
+    printf("inicio\n\n");
 
     GrapfP grafo = NuevoGraf();
 
@@ -13,11 +13,20 @@ int main()
 
     LeerGrafo(grafo);
 
-    ImprimirGrafo(grafo);
+ //   ImprimirGrafo(grafo);
 
     //printf("Cantidad de colores usados: %u\n", CantidadDeColores(grafo));
 
     //OrdenWelshPowell(grafo);
+    //printf("La cantidad de colores con Greedy es: %u\n\n", Greedy(grafo));
+
+
+    printf("La cantidad de colores con DSATUR es: %u\n\n", DSATUR(grafo));
+    //GrandeChico(grafo);
+
+
+
+    //ChicoGrande(grafo);
 
     //ImprimirColor(grafo, 433);
 
@@ -25,11 +34,10 @@ int main()
 
     //printf("DESPUES DE LeerGraf y ANTES DE DestruirGraf\n");
 
-    //printf("la cantidad de colores es %u\n", Greedy(grafo));
 
     DestruirGraf(grafo);
 
-    printf("Final\n");
+    printf("Final\n\n");
 
     return 0;
 }

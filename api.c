@@ -62,6 +62,8 @@ int DestruirGraf(GrapfP G)
 
     free(G->vertex_array);
 
+    free(G->array_orden);
+
     free(G);
 
     return 1;
@@ -655,12 +657,10 @@ u32 Calcular_Mayor(u32 *array, u32 lenght)
 
     array[posicion] = 0;
 
-    printf("Mayor = %u\n", mayor);
-
-    return mayor;
+    return posicion;
 }
 
-
+// Se pueden optimizar metiendo el Calcular Maximo adentro y obteniendo la cantidad de vertices con dicho color y disminurlo con cada swap
 
 void GrandeChico(GrapfP G)
 {
@@ -675,35 +675,43 @@ void GrandeChico(GrapfP G)
     {
         array_colores[i] = NumeroVerticesDeColor(G, i); // Asigno la cantidad de colores al array de colores
     }
-
-    printf("BEGIN < Array de cantidad colores = [  ");
+//-----------------------------------------------------------------------------------------------------------------------
+    printf("BEGIN <<< Array de cantidad de vertices por color = [ ");
     for(u32 i = 1; i <= cant_colores; i++)
     {
-        printf("%u  ", array_colores[i]);
+        printf("%u ", array_colores[i]);
     }
-    printf("] > END\n");
+    printf("] >>> END\n");
 
-    u32 index;
-
-    u32 mayor = 0;
-    u32 j = 0;
+    printf("BEGIN <<< Array de cantidad de color por vertices = [ ");
+    for(u32 i = 1; i <= cant_colores; i++)
+    {
+        printf("%u ", i);
+    }
+    printf("] >>> END\n");
+//-----------------------------------------------------------------------------------------------------------------------
+    u32 index_color;
+    u32 posicion_color = 0;
+    u32 j;
     u32 indice_vertice = 0;
 
-    for(index = 1; index <= cant_colores; index++)
+    for(index_color = 1; index_color <= cant_colores; index_color++)
     {
-        mayor = Calcular_Mayor(array_colores, cant_colores);
+        posicion_color = Calcular_Mayor(array_colores, cant_colores); // Calcula el mayor elemento del array de colores y en su posicion pone 0
 
-        while(j < G->vertex_count && indice_vertice < G->vertex_count && mayor > 0)
+        j = 0;
+        while(j < G->vertex_count && indice_vertice < G->vertex_count)
         {
-            if(G->vertex_array[G->array_orden[j]]->color == index)
+            if(G->vertex_array[G->array_orden[j]]->color == posicion_color)
             {
                 swap(G->array_orden, j, indice_vertice);
                 indice_vertice ++;
-                mayor--;
             }
             j++;
         }
     }
+
+    free(array_colores);
 
     ORDEN_EN_LISTA(G);
     SHOW_ORDEN(G);
@@ -726,15 +734,11 @@ u32 Calcular_Menor(u32 *array, u32 lenght)
 
     array[posicion] = UINT32_MAX;
 
-    printf("Menor = %u\n", menor);
-
-    return menor;
+    return posicion;
 }
-
 
 void ChicoGrande(GrapfP G)
 {
-    //SHOW_GRAFO(G);
     SHOW_ORDEN(G);
     ORDEN_EN_LISTA(G);
 
@@ -742,56 +746,86 @@ void ChicoGrande(GrapfP G)
 
     u32 *array_colores = calloc(cant_colores + 1, sizeof(u32)); // Implicitamente en la posicion 0 del arreglo esta en 0 por calloc
 
-    array_colores[0] = UINT32_MAX;
-
     for(u32 i = 1; i <= cant_colores; i++)
     {
         array_colores[i] = NumeroVerticesDeColor(G, i); // Asigno la cantidad de colores al array de colores
     }
-
-    printf("BEGIN <<< Array de cantidad colores = [  ");
+//-----------------------------------------------------------------------------------------------------------------------
+    printf("BEGIN <<< Array de cantidad de vertices por color = [ ");
     for(u32 i = 1; i <= cant_colores; i++)
     {
-        printf("%u  ", array_colores[i]);
+        printf("%u ", array_colores[i]);
     }
     printf("] >>> END\n");
 
-    u32 index;
-    u32 menor = 0;
-    u32 j = 0;
+    printf("BEGIN <<< Array de cantidad de color por vertices = [ ");
+    for(u32 i = 1; i <= cant_colores; i++)
+    {
+        printf("%u ", i);
+    }
+    printf("] >>> END\n");
+//-----------------------------------------------------------------------------------------------------------------------
+    u32 index_color;
+    u32 posicion_color = 0;
+    u32 j;
     u32 indice_vertice = 0;
 
-    for(index = 1; index <= cant_colores; index++)
+    for(index_color = 1; index_color <= cant_colores; index_color++)
     {
-        menor = Calcular_Menor(array_colores, cant_colores);
-        printf("FOR\n");
-        while(j < G->vertex_count && indice_vertice < G->vertex_count && menor > 0)
-        {
-            printf("WHILE\n");
-            if(G->vertex_array[G->array_orden[j]]->color == index)
-            {
-                printf("IF\n");
-                    swap(G->array_orden, j, indice_vertice);
+        posicion_color = Calcular_Menor(array_colores, cant_colores); // Calcula el mayor elemento del array de colores y en su posicion pone 0
 
+        j = 0;
+        while(j < G->vertex_count && indice_vertice < G->vertex_count)
+        {
+            if(G->vertex_array[G->array_orden[j]]->color == posicion_color)
+            {
+                swap(G->array_orden, j, indice_vertice);
                 indice_vertice ++;
-                menor--;
             }
             j++;
         }
     }
 
+    free(array_colores);
+
     ORDEN_EN_LISTA(G);
-    //SHOW_GRAFO(G);
     SHOW_ORDEN(G);
 }
 
 
-// void Revierte(GrapfP G)
+
+void Revierte(GrapfP G)
+{
+    SHOW_ORDEN(G);
+    ORDEN_EN_LISTA(G);
+    
+    u32 i = 0; // Me indica la posicion en el array de vertices
+    u32 index = 0; // Me indica la posicion en el array de orden
+    u32 k = CantidadDeColores(G);
+    u32 cant_vertex = 0;
+
+    while(k > 0)
+    {
+        cant_vertex = NumeroVerticesDeColor(G, k); // Numero de vertices de color K
+        
+        while(i < G->vertex_count && index < G->vertex_count && cant_vertex > 0)
+        {
+            if(G->vertex_array[G->array_orden[i]]->color == k)
+            {
+                swap(G->array_orden, i, index); // Swapeo las posicion del array de orden
+                index++; // Me muevo una posicion mas en el array de orden, las anteriores estarian ordenadas
+            }
+            i++;
+        }
+        k--; // Decremento el color
+    }
+
+    ORDEN_EN_LISTA(G);
+    SHOW_ORDEN(G);
+}
+
+
+// void OrdenAleatorio(GrapfP G)
 // {
-//     cant_colores = CantidadDeColores(G);
-
-//     for(u32 index = 0; index < G->vertex_count; i++)
-//     {
-
-//     }
+    
 // }

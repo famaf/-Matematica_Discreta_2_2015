@@ -18,15 +18,19 @@ int main()
     //printf("Cantidad de colores usados: %u\n", CantidadDeColores(grafo));
 
     //OrdenWelshPowell(grafo);
-    //printf("La cantidad de colores con Greedy es: %u\n\n", Greedy(grafo));
+    printf("La cantidad de colores con Greedy es: %u\n\n", Greedy(grafo));
 
 
-    printf("La cantidad de colores con DSATUR es: %u\n\n", DSATUR(grafo));
-    //GrandeChico(grafo);
+    //printf("La cantidad de colores con DSATUR es: %u\n\n", DSATUR(grafo));
+    
+    // printf("<<<<<<GRANDE_CHICO>>>>>>\n");
+    // GrandeChico(grafo);
 
+    printf("<<<<<<CHICO_GRANDE>>>>>>\n");
+    ChicoGrande(grafo);
 
-
-    //ChicoGrande(grafo);
+    // printf("<<<<<REVIERTE>>>>>\n");
+    // Revierte(grafo);
 
     //ImprimirColor(grafo, 433);
 

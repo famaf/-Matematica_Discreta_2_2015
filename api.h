@@ -52,4 +52,6 @@ void GrandeChico(GrapfP G);
 void ChicoGrande(GrapfP G);
 
 
+void Revierte(GrapfP G);
+
 #endif

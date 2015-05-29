@@ -24,9 +24,9 @@ struct GrafoPlus
 } GrafoSt;
 
 
-GrapfP NuevoGraf()
+GrafP NuevoGraf()
 {
-    GrapfP G = calloc(1, sizeof(GrafoSt));
+    GrafP G = calloc(1, sizeof(GrafoSt));
 
     if (G == NULL)
     {
@@ -45,7 +45,7 @@ GrapfP NuevoGraf()
 }
 
 
-int DestruirGraf(GrapfP G)
+int DestruirGraf(GrafP G)
 {
     u32 i;
 
@@ -71,7 +71,7 @@ int DestruirGraf(GrapfP G)
 }
 
 
-void SHOW_GRAFO(GrapfP G)
+void SHOW_GRAFO(GrafP G)
 {
     u32 j, t;
     printf("-----------------------------------------\n");
@@ -87,7 +87,7 @@ void SHOW_GRAFO(GrapfP G)
 }
 
 
-void SHOW_ORDEN(GrapfP G)
+void SHOW_ORDEN(GrafP G)
 {
     u32 i;
     printf("-----------------------------------------\n");
@@ -98,7 +98,7 @@ void SHOW_ORDEN(GrapfP G)
     printf("-----------------------------------------\n");
 }
 
-void ORDEN_EN_LISTA(GrapfP G)
+void ORDEN_EN_LISTA(GrafP G)
 {
     u32 i;
     printf("LISTA DE ORDEN DE VERTICES = [  ");
@@ -113,7 +113,7 @@ void ORDEN_EN_LISTA(GrapfP G)
 u32 contador = 0; // Variable Global que me dice hasta cuanto esta lleno el arreglo vertex_array
 
 
-void add_vertex_id_color_grado(GrapfP G, u32 vertex)
+void add_vertex_id_color_grado(GrafP G, u32 vertex)
 {
     bool existe = false;
     u32 i = 0;
@@ -142,7 +142,7 @@ void add_vertex_id_color_grado(GrapfP G, u32 vertex)
 }
 
 // Guardamos en vecinos la posición en donde está el vértice vecino->
-void add_vecino(GrapfP G, u32 vertex_1, u32 vertex_2)
+void add_vecino(GrafP G, u32 vertex_1, u32 vertex_2)
 {
     bool existe = false;
     bool find1 = false;
@@ -207,7 +207,7 @@ void add_vecino(GrapfP G, u32 vertex_1, u32 vertex_2)
 //     return(line);
 // }
 
-int LeerGrafo(GrapfP G) 
+int LeerGrafo(GrafP G) 
 {
     u32 vertex_count = 0, edges_count = 0; // Varibles con vertices y aristas
     u32 scan_result;
@@ -294,7 +294,7 @@ int LeerGrafo(GrapfP G)
     return vertex_count;
 }
 
-int ImprimirGrafo(GrapfP G)
+int ImprimirGrafo(GrafP G)
 {
     u32 i;
     u32 k;
@@ -319,13 +319,13 @@ int ImprimirGrafo(GrapfP G)
 }
 
 
-u32 CantidadDeColores(GrapfP G)
+u32 CantidadDeColores(GrafP G)
 {
     return G->color_count;
 }
 
 
-u32 NumeroVerticesDeColor(GrapfP G, u32 i){
+u32 NumeroVerticesDeColor(GrafP G, u32 i){
 
     u32 cant_color = 0;
     u32 j;
@@ -341,7 +341,7 @@ u32 NumeroVerticesDeColor(GrapfP G, u32 i){
 }
 
 
-u32 ImprimirColor(GrapfP G, u32 i)
+u32 ImprimirColor(GrafP G, u32 i)
 {
     u32 iterator;
     u32 cantidad_vertex_color = 0;
@@ -378,7 +378,7 @@ u32 ImprimirColor(GrapfP G, u32 i)
 
 
 
-u32 Greedy(GrapfP G)
+u32 Greedy(GrafP G)
 {
     u32 i = 0;
     u32 j = 0;
@@ -423,7 +423,7 @@ u32 Greedy(GrapfP G)
     return max_color;
 }
 
-u32 DSATUR(GrapfP G){
+u32 DSATUR(GrafP G){
 
     u32 i,j,k = 0;
     u32 max_dsatur, dsatur_aux = 0;
@@ -566,7 +566,7 @@ void swap(u32 *array, u32 i, u32 j)
 }
 
 
-u32 Pivot(u32 *array, GrapfP G, u32 left, u32 right)
+u32 Pivot(u32 *array, GrafP G, u32 left, u32 right)
 {
     u32 piv, i, j;
     piv = left;
@@ -598,7 +598,7 @@ u32 Pivot(u32 *array, GrapfP G, u32 left, u32 right)
 }
 
 
-void Quick_Sort_Rec(u32 *array, GrapfP G, u32 left, u32 right)
+void Quick_Sort_Rec(u32 *array, GrafP G, u32 left, u32 right)
 {
     u32 piv;
     
@@ -619,13 +619,13 @@ void Quick_Sort_Rec(u32 *array, GrapfP G, u32 left, u32 right)
 }
 
 
-void Quick_Sort(u32 *array, GrapfP G, u32 length)
+void Quick_Sort(u32 *array, GrafP G, u32 length)
 {
     Quick_Sort_Rec(array, G, 0, length - 1);
 }
 
 
-void OrdenWelshPowell(GrapfP G)
+void OrdenWelshPowell(GrafP G)
 {
     //SHOW_GRAFO(G);
     SHOW_ORDEN(G);
@@ -662,7 +662,7 @@ u32 Calcular_Mayor(u32 *array, u32 lenght)
 
 // Se pueden optimizar metiendo el Calcular Maximo adentro y obteniendo la cantidad de vertices con dicho color y disminurlo con cada swap
 
-void GrandeChico(GrapfP G)
+void GrandeChico(GrafP G)
 {
     SHOW_ORDEN(G);
     ORDEN_EN_LISTA(G);
@@ -737,7 +737,7 @@ u32 Calcular_Menor(u32 *array, u32 lenght)
     return posicion;
 }
 
-void ChicoGrande(GrapfP G)
+void ChicoGrande(GrafP G)
 {
     SHOW_ORDEN(G);
     ORDEN_EN_LISTA(G);
@@ -794,22 +794,22 @@ void ChicoGrande(GrapfP G)
 
 
 
-void Revierte(GrapfP G)
+void Revierte(GrafP G)
 {
     SHOW_ORDEN(G);
     ORDEN_EN_LISTA(G);
     
-    u32 i = 0; // Me indica la posicion en el array de vertices
+    u32 i; // Me indica la posicion en el array de vertices
     u32 index = 0; // Me indica la posicion en el array de orden
-    u32 k = CantidadDeColores(G);
-    u32 cant_vertex = 0;
+    u32 k;
 
-    while(k > 0)
+    for (k = CantidadDeColores(G); k > 0; k--) // Recoro los colores del mas grande al mas chixo
     {
-        cant_vertex = NumeroVerticesDeColor(G, k); // Numero de vertices de color K
-        
-        while(i < G->vertex_count && index < G->vertex_count && cant_vertex > 0)
+        //printf("K = %u\n", k);
+        i = 0;
+        while(i < G->vertex_count && index < G->vertex_count)
         {
+            //printf("WHILE %u\n", i);
             if(G->vertex_array[G->array_orden[i]]->color == k)
             {
                 swap(G->array_orden, i, index); // Swapeo las posicion del array de orden
@@ -817,7 +817,6 @@ void Revierte(GrapfP G)
             }
             i++;
         }
-        k--; // Decremento el color
     }
 
     ORDEN_EN_LISTA(G);
@@ -825,7 +824,7 @@ void Revierte(GrapfP G)
 }
 
 
-// void OrdenAleatorio(GrapfP G)
+// void OrdenAleatorio(GrafP G)
 // {
     
 // }

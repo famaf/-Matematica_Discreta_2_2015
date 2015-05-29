@@ -10,48 +10,48 @@
 typedef uint32_t u32;
 
 
-typedef struct GrafoPlus *GrapfP;
+typedef struct GrafoPlus *GrafP;
 
 
 typedef struct Vertex_Data *Vertex;
 
 
-GrapfP NuevoGraf();
+GrafP NuevoGraf();
 
 
-int DestruirGraf(GrapfP G);
+int DestruirGraf(GrafP G);
 
 
-int LeerGrafo(GrapfP G);
+int LeerGrafo(GrafP G);
 
 
-u32 CantidadDeColores(GrapfP G);
+u32 CantidadDeColores(GrafP G);
 
 
-u32 NumeroVerticesDeColor(GrapfP G, u32 i);
+u32 NumeroVerticesDeColor(GrafP G, u32 i);
 
 
-int ImprimirGrafo(GrapfP G);
+int ImprimirGrafo(GrafP G);
 
 
-u32 ImprimirColor(GrapfP G, u32 i);
+u32 ImprimirColor(GrafP G, u32 i);
 
 
-u32 Greedy(GrapfP G);
+u32 Greedy(GrafP G);
 
 
-u32 DSATUR(GrapfP G);
+u32 DSATUR(GrafP G);
 
 
-void OrdenWelshPowell(GrapfP G);
+void OrdenWelshPowell(GrafP G);
 
 
-void GrandeChico(GrapfP G);
+void GrandeChico(GrafP G);
 
 
-void ChicoGrande(GrapfP G);
+void ChicoGrande(GrafP G);
 
 
-void Revierte(GrapfP G);
+void Revierte(GrafP G);
 
 #endif

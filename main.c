@@ -7,7 +7,7 @@ int main()
 //    u32 mario;
     printf("inicio\n\n");
 
-    GrapfP grafo = NuevoGraf();
+    GrafP grafo = NuevoGraf();
 
 //    printf("DESPUES DE NuevoGraf y ANTES DE LeerGraf\n");
 
@@ -26,11 +26,11 @@ int main()
     // printf("<<<<<<GRANDE_CHICO>>>>>>\n");
     // GrandeChico(grafo);
 
-    printf("<<<<<<CHICO_GRANDE>>>>>>\n");
-    ChicoGrande(grafo);
+    // printf("<<<<<<CHICO_GRANDE>>>>>>\n");
+    // ChicoGrande(grafo);
 
-    // printf("<<<<<REVIERTE>>>>>\n");
-    // Revierte(grafo);
+    printf("<<<<<REVIERTE>>>>>\n");
+    Revierte(grafo);
 
     //ImprimirColor(grafo, 433);
 

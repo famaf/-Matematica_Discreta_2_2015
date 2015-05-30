@@ -6,7 +6,7 @@ test : $(OBJECTS)
 	$(CC) $(CFLAGS) -o test $(OBJECTS) main.c
 
 API.o : API.c API.h
-	$(CC) $(CFLAGS) -c api.c -o API.o
+	$(CC) $(CFLAGS) -c API.c -o API.o
 
 .PHONY : clean
 

@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <time.h>
-#include "api.h"
+#include "API.h"
 
 struct Vertex_Data
 {
@@ -665,8 +665,8 @@ u32 Calcular_Mayor(u32 *array, u32 lenght)
 
 void GrandeChico(GrafP G)
 {
-    SHOW_ORDEN(G);
-    ORDEN_EN_LISTA(G);
+    // SHOW_ORDEN(G);
+    // ORDEN_EN_LISTA(G);
 
     u32 cant_colores = CantidadDeColores(G);
 
@@ -677,19 +677,19 @@ void GrandeChico(GrafP G)
         array_colores[i] = NumeroVerticesDeColor(G, i); // Asigno la cantidad de colores al array de colores
     }
 //-----------------------------------------------------------------------------------------------------------------------
-    printf("BEGIN <<< Array de cantidad de vertices por color = [ ");
-    for(u32 i = 1; i <= cant_colores; i++)
-    {
-        printf("%u ", array_colores[i]);
-    }
-    printf("] >>> END\n");
+    // printf("BEGIN <<< Array de cantidad de vertices por color = [ ");
+    // for(u32 i = 1; i <= cant_colores; i++)
+    // {
+    //     printf("%u ", array_colores[i]);
+    // }
+    // printf("] >>> END\n");
 
-    printf("BEGIN <<< Array de cantidad de color por vertices = [ ");
-    for(u32 i = 1; i <= cant_colores; i++)
-    {
-        printf("%u ", i);
-    }
-    printf("] >>> END\n");
+    // printf("BEGIN <<< Array de cantidad de color por vertices = [ ");
+    // for(u32 i = 1; i <= cant_colores; i++)
+    // {
+    //     printf("%u ", i);
+    // }
+    // printf("] >>> END\n");
 //-----------------------------------------------------------------------------------------------------------------------
     u32 index_color;
     u32 posicion_color = 0;
@@ -714,8 +714,8 @@ void GrandeChico(GrafP G)
 
     free(array_colores);
 
-    ORDEN_EN_LISTA(G);
-    SHOW_ORDEN(G);
+    // ORDEN_EN_LISTA(G);
+    // SHOW_ORDEN(G);
 }
 
 
@@ -740,8 +740,8 @@ u32 Calcular_Menor(u32 *array, u32 lenght)
 
 void ChicoGrande(GrafP G)
 {
-    SHOW_ORDEN(G);
-    ORDEN_EN_LISTA(G);
+    // SHOW_ORDEN(G);
+    // ORDEN_EN_LISTA(G);
 
     u32 cant_colores = CantidadDeColores(G);
 
@@ -752,19 +752,19 @@ void ChicoGrande(GrafP G)
         array_colores[i] = NumeroVerticesDeColor(G, i); // Asigno la cantidad de colores al array de colores
     }
 //-----------------------------------------------------------------------------------------------------------------------
-    printf("BEGIN <<< Array de cantidad de vertices por color = [ ");
-    for(u32 i = 1; i <= cant_colores; i++)
-    {
-        printf("%u ", array_colores[i]);
-    }
-    printf("] >>> END\n");
+    // printf("BEGIN <<< Array de cantidad de vertices por color = [ ");
+    // for(u32 i = 1; i <= cant_colores; i++)
+    // {
+    //     printf("%u ", array_colores[i]);
+    // }
+    // printf("] >>> END\n");
 
-    printf("BEGIN <<< Array de cantidad de color por vertices = [ ");
-    for(u32 i = 1; i <= cant_colores; i++)
-    {
-        printf("%u ", i);
-    }
-    printf("] >>> END\n");
+    // printf("BEGIN <<< Array de cantidad de color por vertices = [ ");
+    // for(u32 i = 1; i <= cant_colores; i++)
+    // {
+    //     printf("%u ", i);
+    // }
+    // printf("] >>> END\n");
 //-----------------------------------------------------------------------------------------------------------------------
     u32 index_color;
     u32 posicion_color = 0;
@@ -789,16 +789,16 @@ void ChicoGrande(GrafP G)
 
     free(array_colores);
 
-    ORDEN_EN_LISTA(G);
-    SHOW_ORDEN(G);
+    // ORDEN_EN_LISTA(G);
+    // SHOW_ORDEN(G);
 }
 
 
 
 void Revierte(GrafP G)
 {
-    SHOW_ORDEN(G);
-    ORDEN_EN_LISTA(G);
+    // SHOW_ORDEN(G);
+    // ORDEN_EN_LISTA(G);
     
     u32 i; // Me indica la posicion en el array de vertices
     u32 index = 0; // Me indica la posicion en el array de orden
@@ -820,8 +820,8 @@ void Revierte(GrafP G)
         }
     }
 
-    ORDEN_EN_LISTA(G);
-    SHOW_ORDEN(G);
+    // ORDEN_EN_LISTA(G);
+    // SHOW_ORDEN(G);
 }
 
 

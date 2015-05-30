@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "api.h"
+#include "API.h"
 
 
 u32 WelshPowell(GrafP G)

@@ -1,12 +1,12 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c99 -g
-OBJECTS = api.o
+OBJECTS = API.o
 
 test : $(OBJECTS)
 	$(CC) $(CFLAGS) -o test $(OBJECTS) main.c
 
-api.o : api.c api.h
-	$(CC) $(CFLAGS) -c api.c -o api.o
+API.o : API.c API.h
+	$(CC) $(CFLAGS) -c api.c -o API.o
 
 .PHONY : clean
 

@@ -60,7 +60,7 @@ int main()
     if (coloreo_WP == 3 || coloreo_D == 3)
     {
         printf("X(G) = 3\n");
-        return o;
+        return 0;
     }
 
     coloreo = MIN(coloreo_WP, coloreo_D);

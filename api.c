@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <time.h>
 #include "api.h"
 
 struct Vertex_Data
@@ -628,12 +629,12 @@ void Quick_Sort(u32 *array, GrafP G, u32 length)
 void OrdenWelshPowell(GrafP G)
 {
     //SHOW_GRAFO(G);
-    SHOW_ORDEN(G);
-    ORDEN_EN_LISTA(G);
+    // SHOW_ORDEN(G);
+    // ORDEN_EN_LISTA(G);
 
     Quick_Sort(G->array_orden, G, G->vertex_count);
 
-    ORDEN_EN_LISTA(G); 
+    // ORDEN_EN_LISTA(G); 
     //SHOW_ORDEN(G);
 }
 
@@ -824,7 +825,62 @@ void Revierte(GrafP G)
 }
 
 
-// void OrdenAleatorio(GrafP G)
-// {
-    
-// }
+void OrdenAleatorio(GrafP G)
+{
+    u32 cantidad_colores = CantidadDeColores(G);
+    u32 *array_aleatorio = calloc(cantidad_colores + 1, sizeof(u32)); // [0 ... cantidad_colores] para alamacenar los numeros aleatorios
+
+    bool flag = false; // Para hacer el chequeo de q si el numero aleatorio ya fue elegido
+    bool hacer_swap; // Me indica si tengo que hacer o no el swap
+    u32 index = 0; // Para recorrer el arreglo de orden
+    u32 i = 0; // para recorrer el arreglo de vertices
+    u32 numero_aleatorio = 0; // numero aleatorio elegido
+    u32 indice_aleatorio = 1; // Indice del arreglo de numeros aleatorios elegidos
+
+    srand(time(NULL)); // Para que los numeros no sean los mismos en cada llamada a la funcion
+
+    numero_aleatorio = rand() % cantidad_colores + 1; // Numero aleatorio entre 1 y cantidad_colores
+    printf("Numero Aleatorio: %u\n", numero_aleatorio);
+
+    while (cantidad_colores != 0) // Hacer While mientras no hayan colores
+    {
+        hacer_swap = true;
+
+// Bloque que corrobora si el numero aleatorio ya fue elegido
+        if (flag)
+        {
+            for(u32 j = 1; j <= cantidad_colores; j++)
+            {
+                if (numero_aleatorio == array_aleatorio[j])
+                {
+                    hacer_swap = false; // Si ya fue elegido, no hago el swap y elijo otro numero
+                }
+            }
+        }
+
+        array_aleatorio[indice_aleatorio] = numero_aleatorio; // Guardo el numero aleatorio en el arreglo.
+
+        indice_aleatorio++; // Aumento el indice del arreglo
+
+        flag = true;
+//---------------------------- BLOQUE DE SWAP ------------------------------
+        if (hacer_swap)
+        {
+            i = 0;
+            while(i < G->vertex_count && index < G->vertex_count)
+            {
+                if(G->vertex_array[G->array_orden[i]]->color == numero_aleatorio)
+                {
+                    swap(G->array_orden, i, index); // Swapeo las posicion del array de orden
+                    index++; // Me muevo una posicion mas en el array de orden, las anteriores estarian ordenadas
+                }
+                i++;
+            }
+            cantidad_colores --; // Disminuyo la cantidad de colores
+        }
+//-------------------------------------------------------------------------
+        numero_aleatorio = rand() % cantidad_colores + 1; // Calculo otro numero aleatorio.
+    }
+
+    free(array_aleatorio); // Libero el arreglo de numeros aleatorios.
+}

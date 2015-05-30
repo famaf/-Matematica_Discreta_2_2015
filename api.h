@@ -54,4 +54,8 @@ void ChicoGrande(GrafP G);
 
 void Revierte(GrafP G);
 
+
+void OrdenAleatorio(GrafP G);
+
+
 #endif

@@ -1,6 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 #define MIN(x, y) x<y?x:y
+
 
 u32 WelshPowell(GrapfP G)
 {
@@ -16,9 +19,11 @@ int main()
 {
     u32 check = 0;
     u32 coloreo = 0;
+    u32 coloreo_G = 0;
     u32 coloreo_WP = 0;
     u32 coloreo_D = 0;
-    u32 Nv = 10;
+    u32 porcentaje = 0;
+    u32 Nv;
 
     GrapfP G = NuevoGraf();
 
@@ -59,23 +64,40 @@ int main()
 
     coloreo = MIN(coloreo_WP, coloreo_D);
 
+    srand(time(NULL));
 
-    if (porcentaje < 25)
+    porcentaje = rand() % 101; // Numero entre [0 ... 100]
+
+
+    for (Nv = 10; Nv > 0; Nv --)
     {
+        if (porcentaje >= 4 && porcentaje <= 10)
+        {
+            OrdenAleatorio(G);
+            coloreo_G = Greedy(G);
+        }
+        else if (porcentaje > 10 && porcentaje =< 50)
+        {
+            Revierte(G);
+            coloreo_G = Greedy(G);
+        }
+        else if (porcentaje > 50 && porcentaje <= 75)
+        {
+            ChicoGrande(G);
+            coloreo_G = Greedy(G);
+        }
+        else if (porcentaje)
+        {
+            GrandeChico(G);
+            coloreo_G = Greedy(G);
+        }
 
-    }
-    else if (porcentaje >= 25 && porcentaje < 50)
-    {
+        coloreo = MIN(coloreo, coloreo_G);
 
+        porcentaje = rand() % 101;
     }
-    else if (porcentaje >= 50 && porcentaje < 75)
-    {
 
-    }
-    else
-    {
-
-    }
+    printf("Mejor coloreo con Greedy iterado %u veces es: %u colores\n", Nv, coloreo);
 
     return 0;
 }

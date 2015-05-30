@@ -2,6 +2,17 @@
 #include <stdlib.h>
 #include "api.h"
 
+
+u32 WelshPowell(GrafP G)
+{
+    u32 result = 0;
+    OrdenWelshPowell(G);
+    result = Greedy(G);
+
+    return result;
+}
+
+
 int main()
 {
 //    u32 mario;
@@ -19,9 +30,12 @@ int main()
 
     //OrdenWelshPowell(grafo);
     printf("La cantidad de colores con Greedy es: %u\n\n", Greedy(grafo));
+//    printf("La cantidad de colores con DSATUR es: %u\n\n", DSATUR(grafo));
+
+  //  printf("La cantidad de colores con WelshPowell es: %u\n\n", WelshPowell(grafo));
 
 
-    //printf("La cantidad de colores con DSATUR es: %u\n\n", DSATUR(grafo));
+
     
     // printf("<<<<<<GRANDE_CHICO>>>>>>\n");
     // GrandeChico(grafo);
@@ -29,8 +43,12 @@ int main()
     // printf("<<<<<<CHICO_GRANDE>>>>>>\n");
     // ChicoGrande(grafo);
 
-    printf("<<<<<REVIERTE>>>>>\n");
-    Revierte(grafo);
+    // printf("<<<<<REVIERTE>>>>>\n");
+    // Revierte(grafo);
+
+    printf("<<<<< ORDEN ALEATORIO >>>>>\n");
+    OrdenAleatorio(grafo);
+
 
     //ImprimirColor(grafo, 433);
 

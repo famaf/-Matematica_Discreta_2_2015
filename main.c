@@ -32,7 +32,7 @@ int main()
     printf("La cantidad de colores con Greedy es: %u\n\n", Greedy(grafo));
 //    printf("La cantidad de colores con DSATUR es: %u\n\n", DSATUR(grafo));
 
-  //  printf("La cantidad de colores con WelshPowell es: %u\n\n", WelshPowell(grafo));
+    //printf("La cantidad de colores con WelshPowell es: %u\n\n", WelshPowell(grafo));
 
 
 

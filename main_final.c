@@ -87,7 +87,7 @@ int main()
             ChicoGrande(G);
             coloreo_G = Greedy(G);
         }
-        else if (porcentaje)
+        else if (porcentaje > 75 && porcentaje <= 100)
         {
             GrandeChico(G);
             coloreo_G = Greedy(G);

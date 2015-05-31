@@ -828,60 +828,85 @@ void Revierte(GrafP G)
 
 void OrdenAleatorio(GrafP G)
 {
+    // SHOW_ORDEN(G);
+    // ORDEN_EN_LISTA(G);
+    
     u32 cantidad_colores = CantidadDeColores(G);
     u32 *array_aleatorio = calloc(cantidad_colores + 1, sizeof(u32)); // [0 ... cantidad_colores] para alamacenar los numeros aleatorios
 
     bool flag = false; // Para hacer el chequeo de q si el numero aleatorio ya fue elegido
     bool hacer_swap; // Me indica si tengo que hacer o no el swap
     u32 index = 0; // Para recorrer el arreglo de orden
-    u32 i = 0; // para recorrer el arreglo de vertices
-    u32 numero_aleatorio = 0; // numero aleatorio elegido
-    u32 indice_aleatorio = 1; // Indice del arreglo de numeros aleatorios elegidos
+    u32 i = 0; // Para recorrer el arreglo de vertices
+    u32 numero_aleatorio = 0; // Numero aleatorio elegido
+
+    printf("\nBEGIN <<< [  ");
+    for(u32 a = 1; a <= cantidad_colores; a++)
+    {
+        printf("%u  ", array_aleatorio[a]);
+    }
+    printf("] >>> END\n");
+
+
 
     srand(time(NULL)); // Para que los numeros no sean los mismos en cada llamada a la funcion
 
     numero_aleatorio = rand() % cantidad_colores + 1; // Numero aleatorio entre 1 y cantidad_colores
     printf("Numero Aleatorio: %u\n", numero_aleatorio);
 
-    while (cantidad_colores != 0) // Hacer While mientras no hayan colores
+    while (cantidad_colores > 0) // Hacer While mientras no hayan colores
     {
+        printf("HOLA 1\n");
         hacer_swap = true;
 
-// Bloque que corrobora si el numero aleatorio ya fue elegido
+        // Bloque que corrobora si el numero aleatorio ya fue elegido
         if (flag)
         {
-            for(u32 j = 1; j <= cantidad_colores; j++)
+            printf("HOLA 2\n");
+            if (array_aleatorio[numero_aleatorio] == 1)
             {
-                if (numero_aleatorio == array_aleatorio[j])
-                {
-                    hacer_swap = false; // Si ya fue elegido, no hago el swap y elijo otro numero
-                }
+                printf("HOLA 3\n");
+                hacer_swap = false; // Si ya fue elegido, no hago el swap y elijo otro numero
             }
         }
-
-        array_aleatorio[indice_aleatorio] = numero_aleatorio; // Guardo el numero aleatorio en el arreglo.
-
-        indice_aleatorio++; // Aumento el indice del arreglo
-
+        
+        array_aleatorio[numero_aleatorio] = 1; // Guardo el numero aleatorio en el arreglo. Si es 1 es porque ya salio, 0 sino
         flag = true;
 //---------------------------- BLOQUE DE SWAP ------------------------------
         if (hacer_swap)
         {
+            printf("HOLA 4\n");
             i = 0;
             while(i < G->vertex_count && index < G->vertex_count)
             {
+                printf("HOLA 5\n");
                 if(G->vertex_array[G->array_orden[i]]->color == numero_aleatorio)
                 {
+                    printf("HOLA 6\n");
                     swap(G->array_orden, i, index); // Swapeo las posicion del array de orden
                     index++; // Me muevo una posicion mas en el array de orden, las anteriores estarian ordenadas
                 }
                 i++;
             }
+            printf("HOLA 7\n");
             cantidad_colores --; // Disminuyo la cantidad de colores
+            printf("DISMINUIR Cantidad de colores: %u\n", cantidad_colores);
         }
-//-------------------------------------------------------------------------
-        numero_aleatorio = rand() % cantidad_colores + 1; // Calculo otro numero aleatorio.
-    }
+        printf("SE MANTIENE Cantidad de colores: %u\n", cantidad_colores);
+        printf("HOLA 8\n");
 
+        // printf("\nBEGIN <<< [  ");
+        // for(u32 a = 1; a <= G->color_count; a++)
+        // {
+        //     printf("%u  ", array_aleatorio[a]);
+        // }
+        // printf("] >>> END\n");
+
+//-------------------------------------------------------------------------
+        numero_aleatorio = rand() % cantidad_colores + 1; // Calculo otro numero aleatorio
+        printf("Numero Aleatorio: %u\n", numero_aleatorio   );
+    }
+    // ORDEN_EN_LISTA(G);
+    // SHOW_ORDEN(G);
     free(array_aleatorio); // Libero el arreglo de numeros aleatorios.
 }

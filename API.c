@@ -439,11 +439,15 @@ u32 Greedy(GrafP G)
 u32 DSATUR(GrafP G){
 
     u32 i,j,k = 0;
-    u32 max_dsatur, dsatur_aux = 0;
+    u32 dsatur_aux = 0;
+    u32 max_dsatur = 0;
     u32 dsatur[G->vertex_count];
-    u32 max_grado, grado_aux = 0;
-    u32 empate_dsatur, por_colorear = 0;
-    u32 color_actual, color_max = 0;
+    u32 grado_aux = 0;
+    u32 max_grado = 0;
+    u32 por_colorear = 0;
+    u32 empate_dsatur = 0;
+    u32 color_max = 0;
+    u32 color_actual = 0;
     u32 vecino_j = 0;
     bool falta_colorear = true;
     bool no_actualizar_dsatur = false;
@@ -484,7 +488,7 @@ u32 DSATUR(GrafP G){
         }
 
         grado_aux = 0;
-        
+
         for(i = 0; i < G->vertex_count; i++)
         {
             if(G->vertex_array[G->array_orden[i]]->color == 0)
@@ -657,7 +661,7 @@ void OrdenWelshPowell(GrafP G)
 u32 Calcular_Mayor(u32 *array, u32 length)
 {
     u32 mayor = 0;
-    u32 posicion;
+    u32 posicion = 0;
 
     for(u32 i = 1; i <= length; i++)
     {
@@ -734,7 +738,7 @@ void GrandeChico(GrafP G)
 u32 Calcular_Menor(u32 *array, u32 length)
 {
     u32 menor = UINT32_MAX;
-    u32 posicion;
+    u32 posicion = 0;
 
     for(u32 i = 1; i <= length; i++)
     {

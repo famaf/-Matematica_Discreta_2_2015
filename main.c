@@ -15,7 +15,6 @@ u32 WelshPowell(GrafP G)
 
 int main()
 {
-//    u32 mario;
     printf("inicio\n\n");
 
     GrafP grafo = NuevoGraf();
@@ -24,7 +23,7 @@ int main()
 
     LeerGrafo(grafo);
 
- //   ImprimirGrafo(grafo);
+//   ImprimeGrafo(grafo);
 
     //printf("Cantidad de colores usados: %u\n", CantidadDeColores(grafo));
 

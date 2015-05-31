@@ -5,7 +5,7 @@
 
 #define MIN(x, y) x<y?x:y
 
-
+// Funcion que colorea un grafo segun WelshPowell
 u32 WelshPowell(GrafP G)
 {
     u32 coloreo = 0;

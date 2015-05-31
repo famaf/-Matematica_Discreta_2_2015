@@ -6,19 +6,21 @@
 #define MIN(x, y) x<y?x:y
 
 
-u32 WelshPowell(GrapfP G)
+u32 WelshPowell(GrafP G)
 {
+    u32 coloreo = 0;
+
     OrdenWelshPowell(G);
 
     coloreo = Greedy(G);
 
-    return coloreo,
+    return coloreo;
 }
 
 
 int main()
 {
-    u32 check = 0;
+    int check = 0;
     u32 coloreo = 0;
     u32 coloreo_G = 0;
     u32 coloreo_WP = 0;
@@ -26,9 +28,9 @@ int main()
     u32 porcentaje = 0;
     u32 Nv;
 
-    GrapfP G = NuevoGraf();
+    GrafP G = NuevoGraf();
 
-    check = LeerGrafo();
+    check = LeerGrafo(G);
 
     if (check == 0)
     {
@@ -77,7 +79,7 @@ int main()
             OrdenAleatorio(G);
             coloreo_G = Greedy(G);
         }
-        else if (porcentaje > 10 && porcentaje =< 50)
+        else if (porcentaje > 10 && porcentaje <= 50)
         {
             Revierte(G);
             coloreo_G = Greedy(G);

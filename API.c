@@ -111,6 +111,17 @@ void ORDEN_EN_LISTA(GrafP G)
     printf("]\n");
 }
 
+void IMPRIMIR_ARRAY_ALEATORIO(u32 *array, u32 length)
+{
+    printf("\nBEGIN <<< [  ");
+    for(u32 a = 1; a <= length; a++)
+    {
+        printf("%u  ", array[a]);
+    }
+    printf("] >>> END\n");
+
+}
+
 
 u32 contador = 0; // Variable Global que me dice hasta cuanto esta lleno el arreglo vertex_array
 
@@ -643,12 +654,12 @@ void OrdenWelshPowell(GrafP G)
     Si 'eleccion' es 'true' => calcula el maximo elemento del arreglo
     Si 'eleccion' es 'false' => calcula el menor elemento del arreglo
 */
-u32 Calcular_Mayor(u32 *array, u32 lenght)
+u32 Calcular_Mayor(u32 *array, u32 length)
 {
     u32 mayor = 0;
     u32 posicion;
 
-    for(u32 i = 1; i <= lenght; i++)
+    for(u32 i = 1; i <= length; i++)
     {
         if(array[i] > mayor)
         {
@@ -720,12 +731,12 @@ void GrandeChico(GrafP G)
 }
 
 
-u32 Calcular_Menor(u32 *array, u32 lenght)
+u32 Calcular_Menor(u32 *array, u32 length)
 {
     u32 menor = UINT32_MAX;
     u32 posicion;
 
-    for(u32 i = 1; i <= lenght; i++)
+    for(u32 i = 1; i <= length; i++)
     {
         if(array[i] < menor)
         {
@@ -828,10 +839,11 @@ void Revierte(GrafP G)
 
 void OrdenAleatorio(GrafP G)
 {
-    // SHOW_ORDEN(G);
-    // ORDEN_EN_LISTA(G);
-    
+    //SHOW_ORDEN(G);
+    //ORDEN_EN_LISTA(G);
+
     u32 cantidad_colores = CantidadDeColores(G);
+    u32 cantidad_colores_variable = CantidadDeColores(G);
     u32 *array_aleatorio = calloc(cantidad_colores + 1, sizeof(u32)); // [0 ... cantidad_colores] para alamacenar los numeros aleatorios
 
     bool flag = false; // Para hacer el chequeo de q si el numero aleatorio ya fue elegido
@@ -840,73 +852,48 @@ void OrdenAleatorio(GrafP G)
     u32 i = 0; // Para recorrer el arreglo de vertices
     u32 numero_aleatorio = 0; // Numero aleatorio elegido
 
-    printf("\nBEGIN <<< [  ");
-    for(u32 a = 1; a <= cantidad_colores; a++)
-    {
-        printf("%u  ", array_aleatorio[a]);
-    }
-    printf("] >>> END\n");
-
-
+    //IMPRIMIR_ARRAY_ALEATORIO(array_aleatorio, cantidad_colores);
 
     srand(time(NULL)); // Para que los numeros no sean los mismos en cada llamada a la funcion
 
     numero_aleatorio = rand() % cantidad_colores + 1; // Numero aleatorio entre 1 y cantidad_colores
-    printf("Numero Aleatorio: %u\n", numero_aleatorio);
 
-    while (cantidad_colores > 0) // Hacer While mientras no hayan colores
+    while (cantidad_colores_variable > 0) // Hacer While mientras no hayan colores
     {
-        printf("HOLA 1\n");
         hacer_swap = true;
 
         // Bloque que corrobora si el numero aleatorio ya fue elegido
         if (flag)
         {
-            printf("HOLA 2\n");
             if (array_aleatorio[numero_aleatorio] == 1)
             {
-                printf("HOLA 3\n");
                 hacer_swap = false; // Si ya fue elegido, no hago el swap y elijo otro numero
             }
         }
-        
-        array_aleatorio[numero_aleatorio] = 1; // Guardo el numero aleatorio en el arreglo. Si es 1 es porque ya salio, 0 sino
-        flag = true;
 //---------------------------- BLOQUE DE SWAP ------------------------------
         if (hacer_swap)
         {
-            printf("HOLA 4\n");
+            array_aleatorio[numero_aleatorio] = 1; // Guardo el numero aleatorio en el arreglo. Si es 1 es porque ya salio, 0 sino
+            flag = true;
             i = 0;
             while(i < G->vertex_count && index < G->vertex_count)
             {
-                printf("HOLA 5\n");
                 if(G->vertex_array[G->array_orden[i]]->color == numero_aleatorio)
                 {
-                    printf("HOLA 6\n");
                     swap(G->array_orden, i, index); // Swapeo las posicion del array de orden
                     index++; // Me muevo una posicion mas en el array de orden, las anteriores estarian ordenadas
                 }
                 i++;
             }
-            printf("HOLA 7\n");
-            cantidad_colores --; // Disminuyo la cantidad de colores
-            printf("DISMINUIR Cantidad de colores: %u\n", cantidad_colores);
+            cantidad_colores_variable --; // Disminuyo la cantidad de colores
         }
-        printf("SE MANTIENE Cantidad de colores: %u\n", cantidad_colores);
-        printf("HOLA 8\n");
 
-        // printf("\nBEGIN <<< [  ");
-        // for(u32 a = 1; a <= G->color_count; a++)
-        // {
-        //     printf("%u  ", array_aleatorio[a]);
-        // }
-        // printf("] >>> END\n");
+        //IMPRIMIR_ARRAY_ALEATORIO(array_aleatorio, cantidad_colores);
 
 //-------------------------------------------------------------------------
         numero_aleatorio = rand() % cantidad_colores + 1; // Calculo otro numero aleatorio
-        printf("Numero Aleatorio: %u\n", numero_aleatorio   );
     }
-    // ORDEN_EN_LISTA(G);
-    // SHOW_ORDEN(G);
+    //ORDEN_EN_LISTA(G);
+    //SHOW_ORDEN(G);
     free(array_aleatorio); // Libero el arreglo de numeros aleatorios.
 }

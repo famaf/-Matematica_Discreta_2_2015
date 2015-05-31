@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c99 -g
+CFLAGS = -Wall -Wextra -O3 -std=c99 -g
 OBJECTS = API.o
 
 test : $(OBJECTS)

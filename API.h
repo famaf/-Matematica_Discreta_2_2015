@@ -1,9 +1,25 @@
 #ifndef API_H
 #define API_H
 
+
+/**************************************************
+            API de coloreo de grafos
+Integrantes:
+------------
+
+    * Mario Ferreyra
+      E-mail: marioezequiel.ferreyra@yahoo.com.ar
+
+    * Alan Bracco
+      E-mail: internetagb@gmail.com
+
+**************************************************/
+
+
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
+
 
 /**************************************************
                     REFERENCIAS                    
@@ -13,7 +29,6 @@
 * A >= B : A es mayor o igual a B
 
 **************************************************/
-
 
 
 typedef uint32_t u32; // Especifica un entero sin signo de 32 bits 

@@ -584,7 +584,9 @@ void Quick_Sort_Rec(u32 *array, GrafP G, u32 left, u32 right)
     }
 }
 
-
+// No hay mucho que explicar en este algoritmo de ordenacion, es muy conocido
+// Lo unico que se realizo fueron adaptaciones a nuestra necesidad, pero el concepto
+// sigue siendo el mismo
 void Quick_Sort(u32 *array, GrafP G, u32 length)
 {
     Quick_Sort_Rec(array, G, 0, length - 1);

@@ -167,9 +167,10 @@ int LeerGrafo(GrafP G)
     char line; // Variable que guarda el primer caracter ingresado
     u32 i = 0; // Indice para recorrer la entrada por primera vez, segun la cantidad de lados ingresados
     u32 j; // Indice para recorrer el arreglo de vertices
-    u32 k = 0; // Indice para recorrer la entrada por segunda vez, segun la cantidad de lados ingresados
     u32 left; // Variable para almacenar el vertice izquierdo segun la entrada
     u32 right; // Variable para almacenar el vertice derecho segun la entrada
+    u32 *lefts;
+    u32 *rights;
 
 // --------------------------PRIMERA RECORRIDA ----------------------------
     // Leo la entrada ingnorando los comentarios, esperando hasta que se ingrese un 'p'
@@ -192,6 +193,8 @@ int LeerGrafo(GrafP G)
 
     G->vertex_array = calloc(vertex_count, sizeof(Vertex)); // Tamaño del arreglo de vertices
     G->array_orden = calloc(vertex_count, sizeof(u32)); // Tamaño del arreglo de orden
+    lefts = calloc(edges_count, sizeof(u32));
+    rights = calloc(edges_count, sizeof(u32));
 
     // Leo la entrada donde se expresa los lados del grafo
     while (i < edges_count && scan_result == 2)
@@ -200,7 +203,6 @@ int LeerGrafo(GrafP G)
         right = 0;
 
         scan_result = fscanf(stdin, "\ne %u %u", &left, &right); // Guardo los vertices ingresados
-
         // Chequeo que la entrada sea correcta y me fijo que no ingresen un lado con los mismos vertices
         // Por Ejemplo: e 1 1
         if (left == right || scan_result != 2)
@@ -209,6 +211,8 @@ int LeerGrafo(GrafP G)
         }
         else
         {
+            lefts[i] = left;
+            rights[i] = right;
             add_vertex_id_color_grado(G, left); // Agrego el vertice a la estructura
             add_vertex_id_color_grado(G, right); // Agrego el vertice a la estructura
         }
@@ -223,32 +227,13 @@ int LeerGrafo(GrafP G)
     }
 // -----------------------------------------------------------------------
 
-    fseek(stdin, 0, 0); // Recorro la entrada nuevamente para asignar los vecinos de cada vertice
-
-// --------------------------SEGUNDA RECORRIDA ----------------------------
-    while (fscanf(stdin, "%c", &line) != EOF && line != 'p')
+    for(i = 0; i < edges_count;i++)
     {
-        while (fscanf(stdin, "%c", &line) != EOF && line != '\n');
+        add_vecino(G, lefts[i], rights[i]); // Agrego los vecinos de cada vertice.
     }
 
-    scan_result = fscanf(stdin, "%*s %u %u\n", &vertex_count, &edges_count);
-
-    if (scan_result != 2)
-    {
-        return -1;
-    }
-
-    while (k < edges_count && scan_result == 2)
-    {
-        left = 0;
-        right = 0;
-
-        scan_result = fscanf(stdin, "\ne %u %u", &left, &right);
-
-        add_vecino(G, left, right); // Agrego los vecinos de cada vertice.
-
-        k++;
-    }
+    free(lefts);
+    free(rights);
 // -----------------------------------------------------------------------
 
     return vertex_count;

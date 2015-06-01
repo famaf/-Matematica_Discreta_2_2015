@@ -45,7 +45,7 @@ int main()
 
     coloreo_D = DSATUR(G);
 
-    if (coloreo == 2)
+    if (coloreo_D == 2)
     {
         printf("Grafo Bipartito\n");
         return 0;
@@ -71,17 +71,11 @@ int main()
 
     porcentaje = rand() % 101; // Numero entre [0 ... 100]
 
-
-    for (Nv = 10; Nv > 0; Nv --)
+    for (Nv = 0; Nv < 11; Nv ++)
     {
         if (porcentaje >= 4 && porcentaje <= 10)
         {
             OrdenAleatorio(G);
-            coloreo_G = Greedy(G);
-        }
-        else if (porcentaje > 10 && porcentaje <= 50)
-        {
-            Revierte(G);
             coloreo_G = Greedy(G);
         }
         else if (porcentaje > 50 && porcentaje <= 75)
@@ -94,13 +88,18 @@ int main()
             GrandeChico(G);
             coloreo_G = Greedy(G);
         }
+        else
+        {
+            Revierte(G);
+            coloreo_G = Greedy(G);
+        }
 
         coloreo = MIN(coloreo, coloreo_G);
 
         porcentaje = rand() % 101;
     }
 
-    printf("Mejor coloreo con Greedy iterado %u veces es: %u colores\n", Nv, coloreo);
+    printf("Mejor coloreo con Greedy iterado %u veces es: %u colores\n", Nv - 1, coloreo);
 
     return 0;
 }

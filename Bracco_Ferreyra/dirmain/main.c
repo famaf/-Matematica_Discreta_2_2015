@@ -57,7 +57,7 @@ int main()
 
     coloreo_WP = WelshPowell(G);
 
-    printf("WelshPowell: Colores Usados: %u\n", coloreo_WP);
+    printf("Welsh Powell: Colores Usados: %u\n", coloreo_WP);
 
     coloreo_D = DSATUR(G);
 

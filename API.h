@@ -5,6 +5,16 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+/**************************************************
+                    REFERENCIAS                    
+* A < B : A es menor a B
+* A > B : A es mayor a B
+* A <= B : A es menor o igual a B
+* A >= B : A es mayor o igual a B
+
+**************************************************/
+
+
 
 typedef uint32_t u32; // Especifica un entero sin signo de 32 bits 
 
@@ -92,7 +102,7 @@ void GrandeChico(GrafP G);
 /*
     Si G esta coloreado con r colores y W1 son los vertices coloreados con 1, W2 los coloreados con 2, etc,
     entonces esta funcion ordena los vertices poniendo primero los vertices de Wj1 (en algun orden)
-    luego los de Wj2 (en algun orden), etc, donde j1, j2, ... son tales que |Wj1| ≥ |Wj2| ≥ ... ≥ |Wjr|.
+    luego los de Wj2 (en algun orden), etc, donde j1, j2, ... son tales que |Wj1| >= |Wj2| >= ... >= |Wjr|.
 */
 
 
@@ -100,7 +110,7 @@ void ChicoGrande(GrafP G);
 /*
     Si G esta coloreado con r colores y W1 son los vertices coloreados con 1, W2 los coloreados con 2, etc,
     entonces esta funcion ordena los vertices poniendo primero los vertices de Wj1 (en algun orden)
-    luego los de Wj2 (en algun orden), etc, donde j1, j2, ... son tales que |Wj1| ≤ |Wj2| ≤ ... ≤ |Wjr.
+    luego los de Wj2 (en algun orden), etc, donde j1, j2, ... son tales que |Wj1| <= |Wj2| <= ... <= |Wjr.
 */
 
 

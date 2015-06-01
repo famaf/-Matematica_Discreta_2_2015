@@ -7,6 +7,7 @@
 #include <time.h>
 #include "API.h"
 
+
 // Estructura de cada vertice
 struct Vertex_Data
 {
@@ -108,6 +109,7 @@ void add_vertex_id_color_grado(GrafP G, u32 vertex)
     }
 }
 
+
 // Guardamos en el areglo de vecinos la posición en donde está su vértice vecino
 void add_vecino(GrafP G, u32 vertex_1, u32 vertex_2)
 {
@@ -169,10 +171,9 @@ int LeerGrafo(GrafP G)
     u32 j; // Indice para recorrer el arreglo de vertices
     u32 left; // Variable para almacenar el vertice izquierdo segun la entrada
     u32 right; // Variable para almacenar el vertice derecho segun la entrada
-    u32 *lefts;
-    u32 *rights;
+    u32 *array_lados_lefts; // Arreglo auxiliar que va a almacenar los lados izquierdos
+    u32 *array_lados_rights; // Arreglo auxiliar que va a almacenar los lados derechos
 
-// --------------------------PRIMERA RECORRIDA ----------------------------
     // Leo la entrada ingnorando los comentarios, esperando hasta que se ingrese un 'p'
     while (fscanf(stdin, "%c", &line) != EOF && line != 'p')
     {
@@ -193,8 +194,9 @@ int LeerGrafo(GrafP G)
 
     G->vertex_array = calloc(vertex_count, sizeof(Vertex)); // Tamaño del arreglo de vertices
     G->array_orden = calloc(vertex_count, sizeof(u32)); // Tamaño del arreglo de orden
-    lefts = calloc(edges_count, sizeof(u32));
-    rights = calloc(edges_count, sizeof(u32));
+
+    array_lados_lefts = calloc(edges_count, sizeof(u32)); // Aloco memoria para el arreglo de lados izquierdos
+    array_lados_rights = calloc(edges_count, sizeof(u32)); // Aloco memoria para el arreglo de lados derechos
 
     // Leo la entrada donde se expresa los lados del grafo
     while (i < edges_count && scan_result == 2)
@@ -211,8 +213,8 @@ int LeerGrafo(GrafP G)
         }
         else
         {
-            lefts[i] = left;
-            rights[i] = right;
+            array_lados_lefts[i] = left; // Guardo el lado izquierdo de la entrada en el arreglo de lados izquierdos
+            array_lados_rights[i] = right; // Guardo el lado derecho de la entrada en el arreglo de lados derechos
             add_vertex_id_color_grado(G, left); // Agrego el vertice a la estructura
             add_vertex_id_color_grado(G, right); // Agrego el vertice a la estructura
         }
@@ -220,24 +222,24 @@ int LeerGrafo(GrafP G)
         i++; // Leo la siguiente linea de la entrada
     }
 
-    // Aloco memoria segun la cantidad de vecinos que tenga cada vertice
+    // Aloco memoria para los vecinos de cada vertice segun su grado
     for(j = 0; j < G->vertex_count; j++)
     {
         G->vertex_array[j]->vecinos = calloc(G->vertex_array[j]->grado, sizeof(u32));
     }
-// -----------------------------------------------------------------------
 
+    // Agrego los vecinos de cada vertice a la estructura del grafo
     for(i = 0; i < edges_count;i++)
     {
-        add_vecino(G, lefts[i], rights[i]); // Agrego los vecinos de cada vertice.
+        add_vecino(G, array_lados_lefts[i], array_lados_rights[i]); // Agrego los vecinos de cada vertice.
     }
 
-    free(lefts);
-    free(rights);
-// -----------------------------------------------------------------------
+    free(array_lados_lefts); //Libero el array auxiliar de lados izquierdos
+    free(array_lados_rights); //Libero el array auxiliar de lados derechos
 
     return vertex_count;
 }
+
 
 int ImprimeGrafo(GrafP G)
 {
@@ -685,6 +687,7 @@ u32 Calcular_Menor(u32 *array, u32 length)
     return posicion;
 }
 
+
 void ChicoGrande(GrafP G)
 {
     u32 cant_colores = CantidadDeColores(G); // Cantidad de colores que tiene el grafo
@@ -729,8 +732,7 @@ void ChicoGrande(GrafP G)
 
     free(array_colores); // Libero el arreglo de colores
 }
-
-
+    
 
 void Revierte(GrafP G)
 {

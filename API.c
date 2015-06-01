@@ -110,17 +110,17 @@ void add_vertex_id_color_grado(GrafP G, u32 vertex)
 }
 
 
-// Guardamos en el areglo de vecinos la posición en donde está su vértice vecino
+// Guardamos en el arreglo de vecinos la posición en donde está su vértice vecino
 void add_vecino(GrafP G, u32 vertex_1, u32 vertex_2)
 {
-    bool existe = false;
-    bool find1 = false;
-    bool find2 = false;
-    u32 i = 0;
-    u32 j = 0;
-    u32 pos1 = 0;
-    u32 pos2 = 0;
-
+    bool existe = false; // Indica si existe o no el vértice a agregar
+    bool find1 = false; // Indica si encontré vertex_1
+    bool find2 = false; //Indica si encontré vertex_2
+    u32 i = 0; // Variable para recorrer arreglo de vértices
+    u32 j = 0; // Variable para recorrer arreglo de vecinos
+    u32 pos1 = 0; // Posición de vertex_1
+    u32 pos2 = 0; // Posición de vertex_2
+    // Busca en que posiciones están los vértices si es que ya se agregaron
     while (i < G->vertex_count && !(find1 && find2))
     {
         if (G->vertex_array[i]->id == vertex_1)
@@ -135,7 +135,8 @@ void add_vecino(GrafP G, u32 vertex_1, u32 vertex_2)
         }
         i++;
     }
-
+    // Se fija que vertex_2 no esté entre los vecinos de vertex_1
+    // Si no está, lo agrega.
     while (j < G->vertex_array[pos1]->grado && !existe)
     {
         if (G->vertex_array[pos1]->vecinos[j] == 0)
@@ -148,7 +149,8 @@ void add_vecino(GrafP G, u32 vertex_1, u32 vertex_2)
 
     j = 0;
     existe = false;
-    
+    // Se fija que vertex_1 no esté entre los vecinos de vertex_2
+    // Si no está, lo agrega.
     while (j < G->vertex_array[pos2]->grado && !existe)
     {
         if (G->vertex_array[pos2]->vecinos[j] == 0)
@@ -174,7 +176,7 @@ int LeerGrafo(GrafP G)
     u32 *array_lados_lefts; // Arreglo auxiliar que va a almacenar los lados izquierdos
     u32 *array_lados_rights; // Arreglo auxiliar que va a almacenar los lados derechos
 
-    // Leo la entrada ingnorando los comentarios, esperando hasta que se ingrese un 'p'
+    // Leo la entrada ignorando los comentarios, esperando hasta que se ingrese un 'p'
     while (fscanf(stdin, "%c", &line) != EOF && line != 'p')
     {
         while (fscanf(stdin, "%c", &line) != EOF && line != '\n');
@@ -246,16 +248,17 @@ int ImprimeGrafo(GrafP G)
     u32 i;
     u32 k;
     u32 grado_aux = 0;
-
+    // Imprime la cantidad de vértices y aristas de grafo
     printf("p edge %u %u\n", G->vertex_count, G->edges_count);
-    
+
+// Imprime los lados, una vez que se asegura que el lado a imprimir no haya sido impreso
     for(i = 0; i < G->vertex_count; i++)
     {
         grado_aux = G->vertex_array[i]->grado;
-        
-        for(k = 0; k < grado_aux; k++)
+
+        for(k = 0; k < grado_aux; k++) // Recorre el arreglo de vecinos del vértice actual
         {
-            if(G->vertex_array[i]->vecinos[k] > i)
+            if(G->vertex_array[i]->vecinos[k] > i) //Si fuera menor, significa que ya analizó ese vértice
             {
                 printf("e %u %u\n", G->vertex_array[i]->id, G->vertex_array[G->vertex_array[i]->vecinos[k]]->id);
             }
@@ -333,25 +336,26 @@ u32 ImprimirColor(GrafP G, u32 i)
 
 u32 Greedy(GrafP G)
 {
-    u32 i = 0;
-    u32 j = 0;
-    u32 color_actual = 1;
-    u32 grado_aux = 0;
-    u32 max_color = 0;
-
+    u32 i = 0; // Variable para recorrer el arreglo de vértices
+    u32 j = 0; // Variable para recorrer el arreglo de vecinos
+    u32 color_actual = 1; // Variable para seleccionar el color
+    u32 grado_aux = 0; // Variable para guardar el mayor grado
+    u32 max_color = 0; // Variable para indicar cuantos colores se usaron
+    // Colorea el primer vértice con color 1
     G->vertex_array[G->array_orden[0]]->color = 1;
-
+    // Inicializa el resto de colores de los vértices en 0
     for(i = 1; i < G->vertex_count; i++)
     {
         G->vertex_array[G->array_orden[i]]->color = 0;
     }
-
+    // Recorre el arreglo de vértices para ir coloreandolos
     for(i = 1; i < G->vertex_count; i++)
     {
         j = 0;
         color_actual = 1;
         grado_aux = G->vertex_array[G->array_orden[i]]->grado;
-
+        // Recorre el arreglo de vecinos para ver con que color
+        // (que no exista en ese arreglo), colorear el vértice actual
         while(j < grado_aux)
         {
             j++;
@@ -362,59 +366,60 @@ u32 Greedy(GrafP G)
                 j = 0;
             }
         }
-
+        // Colorea el vértice una vez que decidió el color
         G->vertex_array[G->array_orden[i]]->color = color_actual;
-
+        // Guardamos el mayor color que se usa para colorear
         if(max_color < color_actual)
         {
             max_color = color_actual;
         }
     }
-
+    // Establecemos el numéro de colores del grafo
     G->color_count = max_color;
 
     return max_color;
 }
 
-u32 DSATUR(GrafP G){
 
-    u32 i,j,k = 0;
-    u32 dsatur_aux = 0;
-    u32 max_dsatur = 0;
-    u32 dsatur[G->vertex_count];
-    u32 grado_aux = 0;
-    u32 max_grado = 0;
-    u32 por_colorear = 0;
-    u32 empate_dsatur = 0;
-    u32 color_max = 0;
-    u32 color_actual = 0;
-    u32 vecino_j = 0;
-    bool falta_colorear = true;
-    bool no_actualizar_dsatur = false;
-
+u32 DSATUR(GrafP G)
+{
+    u32 i,j,k = 0; // Variables para recorrer varios arreglos (vértices, vecinos, dsatur, etc)
+    u32 dsatur_aux = 0; // Variable para encontrar el maximo grado de saturación
+    u32 max_dsatur = 0; // Variable para guardar el maximo grado de saturación en cada iteración
+    u32 dsatur[G->vertex_count]; // Arreglo de grado de saturación parcial de los vértices
+    u32 grado_aux = 0; // Variable para encontrar el mayor grado
+    u32 max_grado = 0; // Variable para guardar el mayor grado
+    u32 por_colorear = 0; // Indica el vértice a colorear
+    u32 empate_dsatur = 0; // Variable que indica si hubo o no empates de grados de saturación
+    u32 color_max = 0; // Variable para indicar cuantos colores se usaron
+    u32 color_actual = 0; // Variable para seleccionar el color
+    u32 vecino_j = 0; // Utilizada para los vecinos del vértice a colorear
+    bool falta_colorear = true; // Indica si faltan o no vértices por colorear
+    bool no_actualizar_dsatur = false; // Indica si se debe actualizar el grado de saturación
+    // Inicialización de colores y grado de saturación en 0
     for(i = 0; i < G->vertex_count; i++)
     {
         dsatur[i] = 0;
         G->vertex_array[G->array_orden[i]]->color = 0;
-        
+        // Buscamos el vértice de mayor grado
         if(G->vertex_array[G->array_orden[i]]->grado > grado_aux)
         {
             max_grado = i;
             grado_aux = G->vertex_array[G->array_orden[i]]->grado;
         }
     }
-
+    // Toma el vértice de mayor grado y lo colorea con 1
     G->vertex_array[G->array_orden[max_grado]]->color = 1;
-    
+    // Actualiza el grado de saturación de los vecinos del vértice coloreado
     for(j = 0; j < G->vertex_array[G->array_orden[max_grado]]->grado; j++)
     {
         dsatur[G->vertex_array[G->array_orden[max_grado]]->vecinos[j]]++;
     }
-
+    // Bucle que colorea todos los vértices restantes
     while(falta_colorear)
     {
         dsatur_aux = 0;
-        
+        // Buscamos el mayor grado de saturación
         for(i = 0;i < G->vertex_count;i++)
         {
             if(G->vertex_array[G->array_orden[i]]->color == 0)
@@ -428,7 +433,9 @@ u32 DSATUR(GrafP G){
         }
 
         grado_aux = 0;
-
+        /* Para los casos de empates en grado de saturación,
+           busca el vértice de mayor grado entre los que tienen
+           el mayor grado de saturación */
         for(i = 0; i < G->vertex_count; i++)
         {
             if(G->vertex_array[G->array_orden[i]]->color == 0)
@@ -445,7 +452,7 @@ u32 DSATUR(GrafP G){
                 }
             }
         }
-
+        // Selecciona el vértice de acuerdo a si hubo o no empates
         if(empate_dsatur >= 2)
         {
             por_colorear = max_grado;
@@ -458,7 +465,7 @@ u32 DSATUR(GrafP G){
         color_actual = 1;
         grado_aux = G->vertex_array[G->array_orden[por_colorear]]->grado;
         j = 0;
-
+        // Busca como Greedy con que color colorear el vértice actual
         while(j < grado_aux)
         {
             j++;
@@ -469,7 +476,7 @@ u32 DSATUR(GrafP G){
                 j = 0;
             }
         }
-
+        // Actualización del grado de saturación observado los vecinos de los vecinos del vértice coloreado
         for(j = 0;j < grado_aux; j++)
         {
             vecino_j = G->vertex_array[G->array_orden[por_colorear]]->vecinos[j];
@@ -494,21 +501,21 @@ u32 DSATUR(GrafP G){
 
         i = 0;
         falta_colorear = false;
-        
+        // Se fija si quedan vértices por colorear
         while(i < G->vertex_count && !falta_colorear)
         {
             falta_colorear = falta_colorear || (G->vertex_array[G->array_orden[i]]->color == 0);
             i++;
         }
-        
+        // Colorea el vértice
         G->vertex_array[G->array_orden[por_colorear]]->color = color_actual;
-
+        // Guardamos el mayor color que se usa para colorear
         if(color_max < color_actual)
         {
             color_max = color_actual;
         }
     }
-
+    // Establecemos el numéro de colores del grafo
     G->color_count = color_max;
 
     return color_max;
@@ -586,14 +593,8 @@ void Quick_Sort(u32 *array, GrafP G, u32 length)
 
 void OrdenWelshPowell(GrafP G)
 {
-    // SHOW_ORDEN(G);
-    // ORDEN_EN_LISTA(G);
-
     Quick_Sort(G->array_orden, G, G->vertex_count); // Usamos el algoritmo de ordenamiento "Quick Sort"
                                                     // Para ordenar el arreglo de orden segun el grado de cada vertice
-
-    // ORDEN_EN_LISTA(G); 
-    // SHOW_ORDEN(G);
 }
 
 

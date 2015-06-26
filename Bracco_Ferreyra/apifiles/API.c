@@ -415,6 +415,7 @@ u32 DSATUR(GrafP G)
     {
         dsatur[G->vertex_array[G->array_orden[max_grado]]->vecinos[j]]++;
     }
+
     // Bucle que colorea todos los vértices restantes
     while(falta_colorear)
     {
@@ -424,10 +425,10 @@ u32 DSATUR(GrafP G)
         {
             if(G->vertex_array[G->array_orden[i]]->color == 0)
             {
-                if(dsatur[i] > dsatur_aux)
+                if(dsatur[G->array_orden[i]] > dsatur_aux)
                 {
                     max_dsatur = i;
-                    dsatur_aux = dsatur[i];
+                    dsatur_aux = dsatur[G->array_orden[i]];
                 }
             }
         }
@@ -440,7 +441,7 @@ u32 DSATUR(GrafP G)
         {
             if(G->vertex_array[G->array_orden[i]]->color == 0)
             {
-                if(dsatur[i] == dsatur_aux)
+                if(dsatur[G->array_orden[i]] == dsatur_aux)
                 {
                     empate_dsatur++;
                     
@@ -509,6 +510,7 @@ u32 DSATUR(GrafP G)
         }
         // Colorea el vértice
         G->vertex_array[G->array_orden[por_colorear]]->color = color_actual;
+
         // Guardamos el mayor color que se usa para colorear
         if(color_max < color_actual)
         {

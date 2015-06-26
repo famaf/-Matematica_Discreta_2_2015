@@ -399,6 +399,7 @@ u32 DSATUR(GrafP G)
     // Inicialización de colores y grado de saturación en 0
     for(i = 0; i < G->vertex_count; i++)
     {
+        printf("grado de %u es %u\n", G->vertex_array[G->array_orden[i]]->id, G->vertex_array[G->array_orden[i]]->grado);
         dsatur[i] = 0;
         G->vertex_array[G->array_orden[i]]->color = 0;
         // Buscamos el vértice de mayor grado
@@ -410,11 +411,13 @@ u32 DSATUR(GrafP G)
     }
     // Toma el vértice de mayor grado y lo colorea con 1
     G->vertex_array[G->array_orden[max_grado]]->color = 1;
+    printf("coloreo a %u con %u\n", G->vertex_array[G->array_orden[max_grado]]->id, 1);
     // Actualiza el grado de saturación de los vecinos del vértice coloreado
     for(j = 0; j < G->vertex_array[G->array_orden[max_grado]]->grado; j++)
     {
         dsatur[G->vertex_array[G->array_orden[max_grado]]->vecinos[j]]++;
     }
+
     // Bucle que colorea todos los vértices restantes
     while(falta_colorear)
     {
@@ -424,10 +427,10 @@ u32 DSATUR(GrafP G)
         {
             if(G->vertex_array[G->array_orden[i]]->color == 0)
             {
-                if(dsatur[i] > dsatur_aux)
+                if(dsatur[G->array_orden[i]] > dsatur_aux)
                 {
                     max_dsatur = i;
-                    dsatur_aux = dsatur[i];
+                    dsatur_aux = dsatur[G->array_orden[i]];
                 }
             }
         }
@@ -440,7 +443,7 @@ u32 DSATUR(GrafP G)
         {
             if(G->vertex_array[G->array_orden[i]]->color == 0)
             {
-                if(dsatur[i] == dsatur_aux)
+                if(dsatur[G->array_orden[i]] == dsatur_aux)
                 {
                     empate_dsatur++;
                     
@@ -509,6 +512,7 @@ u32 DSATUR(GrafP G)
         }
         // Colorea el vértice
         G->vertex_array[G->array_orden[por_colorear]]->color = color_actual;
+        printf("coloreo a %u con %u\n", G->vertex_array[G->array_orden[por_colorear]]->id, G->vertex_array[G->array_orden[por_colorear]]->color);
         // Guardamos el mayor color que se usa para colorear
         if(color_max < color_actual)
         {

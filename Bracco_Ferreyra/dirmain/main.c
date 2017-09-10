@@ -8,8 +8,7 @@
 
 
 // Funcion que colorea un grafo segun el algoritmo de WelshPowell
-u32 WelshPowell(GrafP G)
-{
+u32 WelshPowell(GrafP G) {
     u32 coloreo = 0;
 
     OrdenWelshPowell(G);
@@ -20,8 +19,7 @@ u32 WelshPowell(GrafP G)
 }
 
 
-int main()
-{
+int main() {
     int check = 0; // Variable que chequea si la entrada del grafo es correcta o no
     u32 coloreo = 0; // Varible que guarda el mejor coloreo entre los algoritmos
     u32 coloreo_G = 0; // Variable que contiene el coloreo obtenido con el algoritmo de Greedy
@@ -36,21 +34,21 @@ int main()
 
     printf("\n");
 
-    if (check == 0) // Chequeamos que si la cantidad de vertices es 0
-    {
+    // Chequeamos que si la cantidad de vertices es 0
+    if (check == 0) {
         printf("X(G) = 1\n");
         return 0;
     }
-    else if (check == -1) // Si ocurrio un error en la lectura cortamos la execucion del programa
-    {
+    // Si ocurrio un error en la lectura cortamos la execucion del programa
+    else if (check == -1) {
         printf("Ocurrio un error en la lectura del grafo\n");
         return 1;
     }
 
     coloreo_D = DSATUR(G);
 
-    if (coloreo_D == 2) // Si la cantidad de colores es 2, entonces el grafo es bipartito, y terminamos el programa
-    {
+    // Si la cantidad de colores es 2, entonces el grafo es bipartito, y terminamos el programa
+    if (coloreo_D == 2) {
         printf("Grafo Bipartito\n");
         return 0;
     }
@@ -64,8 +62,7 @@ int main()
     printf("DSATUR: Colores Usados: %u\n", coloreo_D);
 
     // Si alguno de los coloreos es 3 entonces mostramos eso por stdout y terminamos el programa
-    if (coloreo_WP == 3 || coloreo_D == 3)
-    {
+    if (coloreo_WP == 3 || coloreo_D == 3) {
         printf("X(G) = 3\n");
         return 0;
     }
@@ -76,29 +73,24 @@ int main()
 
     porcentaje = rand() % 101; // Numero aleatorio entre 0 y 100
 
-    for (i = 0; i < Nv; i++)
-    {
+    for (i = 0; i < Nv; i++) {
         // Si porcentaje esta entre [4 ... 10], se ordenara los vertices de forma aleatoria
-        if (porcentaje >= 4 && porcentaje <= 10)
-        {
+        if (porcentaje >= 4 && porcentaje <= 10) {
             OrdenAleatorio(G);
             coloreo_G = Greedy(G);
         }
         // Si porcentaje esta entre [51 ... 75], se ordenara los vertices de acuerdo a ChicoGrande
-        else if (porcentaje > 50 && porcentaje <= 75)
-        {
+        else if (porcentaje > 50 && porcentaje <= 75) {
             ChicoGrande(G);
             coloreo_G = Greedy(G);
         }
         // Si porcentaje esta entre [76 ... 100], se ordenara los vertices de acuerdo a GrandeChico
-        else if (porcentaje > 75 && porcentaje <= 100)
-        {
+        else if (porcentaje > 75 && porcentaje <= 100) {
             GrandeChico(G);
             coloreo_G = Greedy(G);
         }
         // Si porcentaje esta entre [11 ... 50], se ordenara los vertices de acuerdo a Revierte
-        else
-        {
+        else {
             Revierte(G);
             coloreo_G = Greedy(G);
         }

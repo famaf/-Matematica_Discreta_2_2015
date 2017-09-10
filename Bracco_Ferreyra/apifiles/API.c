@@ -9,8 +9,7 @@
 
 
 // Estructura de cada vertice
-struct Vertex_Data
-{
+struct Vertex_Data {
     u32 id; // Nombre del Vertice
     u32 grado; // Grado del vertice
     u32 color; // Color del vertice
@@ -19,8 +18,7 @@ struct Vertex_Data
 
 
 // Estructura del grafo
-struct GrafoPlus
-{
+struct GrafoPlus {
     u32 vertex_count; // Cantidad de vertices del grafo
     u32 edges_count; // Cantidad de lados del grafo
     u32 color_count; // Cantidad de colores del grafo --> "X(G)"
@@ -29,12 +27,10 @@ struct GrafoPlus
 } GrafoSt;
 
 
-GrafP NuevoGraf()
-{
+GrafP NuevoGraf() {
     GrafP G = calloc(1, sizeof(GrafoSt)); // Asigno un espacio para la estructura del grafo
 
-    if (G == NULL)
-    {
+    if (G == NULL) {
         return NULL;
     }
 
@@ -49,28 +45,23 @@ GrafP NuevoGraf()
 }
 
 
-int DestruirGraf(GrafP G)
-{
+int DestruirGraf(GrafP G) {
     u32 i; // Indice del arreglo de vertices
 
     // Si G en NULL no hay nada que liberar, entonces retornamos 0
-    if(G == NULL)
-    {
+    if (G == NULL) {
         return 0;
     }
 
     // Libero el arreglo de vecinos de cada vertice
-    // Y la estructura que de cada vertice
-    for(i = 0; i < G->vertex_count; i++)
-    {
+    // y la estructura que de cada vertice
+    for (i = 0; i < G->vertex_count; i++) {
         free(G->vertex_array[i]->vecinos);
         free(G->vertex_array[i]);
     }
 
     free(G->vertex_array); // Libero el arreglo de vertices
-
     free(G->array_orden); // Libero el arreglo de orden
-
     free(G); // Libero la estructura del grafo
 
     return 1;
@@ -81,15 +72,13 @@ u32 contador = 0; // Variable Global que me dice hasta cuanto esta lleno el arre
 
 
 // Agrego a cada vertice su identificador (o nombre), su color, y su grado
-void add_vertex_id_color_grado(GrafP G, u32 vertex)
-{
+void add_vertex_id_color_grado(GrafP G, u32 vertex) {
     bool existe = false; // Me dice si el vertice ya estaba el el arreglo de vertices
     u32 i = 0; // Indice para recorrer el arreglo de vertices
-    
-    while(i < contador && !existe)
-    {
-        if (vertex == G->vertex_array[i]->id) // Si vertice esta en el array => aumento grado
-        {
+
+    while (i < contador && !existe) {
+        // Si vertice esta en el array => aumento grado
+        if (vertex == G->vertex_array[i]->id) {
             G->vertex_array[i]->grado ++; // Aumentamos su grado
             existe = true; // Vertice ya estaba en el arreglo de vertices
         }
@@ -97,8 +86,8 @@ void add_vertex_id_color_grado(GrafP G, u32 vertex)
         i++;
     }
 
-    if(!existe) // Si el vertice no estaba en el array, lo agrego
-    {
+    // Si el vertice no estaba en el array, lo agrego
+    if (!existe) {
         G->vertex_array[i] = calloc(1, sizeof(struct Vertex_Data)); // Alocamos memoria para un nuevo vertice
         G->vertex_array[i]->id = vertex; // Añadimos su identificador
         G->vertex_array[i]->grado = 1; // Añadimos su grado inicialmente
@@ -111,8 +100,7 @@ void add_vertex_id_color_grado(GrafP G, u32 vertex)
 
 
 // Guardamos en el arreglo de vecinos la posición en donde está su vértice vecino
-void add_vecino(GrafP G, u32 vertex_1, u32 vertex_2)
-{
+void add_vecino(GrafP G, u32 vertex_1, u32 vertex_2) {
     bool existe = false; // Indica si existe o no el vértice a agregar
     bool find1 = false; // Indica si encontré vertex_1
     bool find2 = false; //Indica si encontré vertex_2
@@ -120,27 +108,24 @@ void add_vecino(GrafP G, u32 vertex_1, u32 vertex_2)
     u32 j = 0; // Variable para recorrer arreglo de vecinos
     u32 pos1 = 0; // Posición de vertex_1
     u32 pos2 = 0; // Posición de vertex_2
+
     // Busca en que posiciones están los vértices si es que ya se agregaron
-    while (i < G->vertex_count && !(find1 && find2))
-    {
-        if (G->vertex_array[i]->id == vertex_1)
-        {
+    while (i < G->vertex_count && !(find1 && find2)) {
+        if (G->vertex_array[i]->id == vertex_1) {
             pos1 = i;
             find1 = true;
         }
-        if(G->vertex_array[i]->id == vertex_2)
-        {
+        if (G->vertex_array[i]->id == vertex_2) {
             pos2 = i;
             find2 = true;
         }
         i++;
     }
+
     // Se fija que vertex_2 no esté entre los vecinos de vertex_1
     // Si no está, lo agrega.
-    while (j < G->vertex_array[pos1]->grado && !existe)
-    {
-        if (G->vertex_array[pos1]->vecinos[j] == 0)
-        {
+    while (j < G->vertex_array[pos1]->grado && !existe) {
+        if (G->vertex_array[pos1]->vecinos[j] == 0) {
             G->vertex_array[pos1]->vecinos[j] = pos2;
             existe = true;
         }
@@ -151,10 +136,8 @@ void add_vecino(GrafP G, u32 vertex_1, u32 vertex_2)
     existe = false;
     // Se fija que vertex_1 no esté entre los vecinos de vertex_2
     // Si no está, lo agrega.
-    while (j < G->vertex_array[pos2]->grado && !existe)
-    {
-        if (G->vertex_array[pos2]->vecinos[j] == 0)
-        {
+    while (j < G->vertex_array[pos2]->grado && !existe) {
+        if (G->vertex_array[pos2]->vecinos[j] == 0) {
             G->vertex_array[pos2]->vecinos[j] = pos1;
             existe = true;
         }
@@ -163,8 +146,7 @@ void add_vecino(GrafP G, u32 vertex_1, u32 vertex_2)
 }
 
 
-int LeerGrafo(GrafP G) 
-{
+int LeerGrafo(GrafP G) {
     u32 vertex_count = 0; // Variable que contiene la cantidad de vertices del grafo
     u32 edges_count = 0; // Variable que contiene la cantidad de aristas del grafo
     u32 scan_result; // Variable que sirve para checkear que los parametros ingresados esta bien
@@ -177,16 +159,14 @@ int LeerGrafo(GrafP G)
     u32 *array_lados_rights; // Arreglo auxiliar que va a almacenar los lados derechos
 
     // Leo la entrada ignorando los comentarios, esperando hasta que se ingrese un 'p'
-    while (fscanf(stdin, "%c", &line) != EOF && line != 'p')
-    {
+    while (fscanf(stdin, "%c", &line) != EOF && line != 'p') {
         while (fscanf(stdin, "%c", &line) != EOF && line != '\n');
     }
 
     scan_result = fscanf(stdin, "%*s %u %u\n", &vertex_count, &edges_count);
 
     // Chequeo que la estrada sea correcta
-    if (scan_result != 2)
-    {
+    if (scan_result != 2) {
         return -1;
     }
 
@@ -201,20 +181,17 @@ int LeerGrafo(GrafP G)
     array_lados_rights = calloc(edges_count, sizeof(u32)); // Aloco memoria para el arreglo de lados derechos
 
     // Leo la entrada donde se expresa los lados del grafo
-    while (i < edges_count && scan_result == 2)
-    {
+    while (i < edges_count && scan_result == 2) {
         left = 0;
         right = 0;
 
         scan_result = fscanf(stdin, "\ne %u %u", &left, &right); // Guardo los vertices ingresados
         // Chequeo que la entrada sea correcta y me fijo que no ingresen un lado con los mismos vertices
         // Por Ejemplo: e 1 1
-        if (left == right || scan_result != 2)
-        {
+        if (left == right || scan_result != 2) {
             return -1;
         }
-        else
-        {
+        else {
             array_lados_lefts[i] = left; // Guardo el lado izquierdo de la entrada en el arreglo de lados izquierdos
             array_lados_rights[i] = right; // Guardo el lado derecho de la entrada en el arreglo de lados derechos
             add_vertex_id_color_grado(G, left); // Agrego el vertice a la estructura
@@ -225,14 +202,12 @@ int LeerGrafo(GrafP G)
     }
 
     // Aloco memoria para los vecinos de cada vertice segun su grado
-    for(j = 0; j < G->vertex_count; j++)
-    {
+    for (j = 0; j < G->vertex_count; j++) {
         G->vertex_array[j]->vecinos = calloc(G->vertex_array[j]->grado, sizeof(u32));
     }
 
     // Agrego los vecinos de cada vertice a la estructura del grafo
-    for(i = 0; i < edges_count;i++)
-    {
+    for (i = 0; i < edges_count;i++) {
         add_vecino(G, array_lados_lefts[i], array_lados_rights[i]); // Agrego los vecinos de cada vertice.
     }
 
@@ -243,23 +218,20 @@ int LeerGrafo(GrafP G)
 }
 
 
-int ImprimeGrafo(GrafP G)
-{
+int ImprimeGrafo(GrafP G) {
     u32 i;
     u32 k;
     u32 grado_aux = 0;
     // Imprime la cantidad de vértices y aristas de grafo
     printf("p edge %u %u\n", G->vertex_count, G->edges_count);
 
-// Imprime los lados, una vez que se asegura que el lado a imprimir no haya sido impreso
-    for(i = 0; i < G->vertex_count; i++)
-    {
+    // Imprime los lados, una vez que se asegura que el lado a imprimir no haya sido impreso
+    for (i = 0; i < G->vertex_count; i++) {
         grado_aux = G->vertex_array[i]->grado;
-
-        for(k = 0; k < grado_aux; k++) // Recorre el arreglo de vecinos del vértice actual
-        {
-            if(G->vertex_array[i]->vecinos[k] > i) //Si fuera menor, significa que ya analizó ese vértice
-            {
+        // Recorre el arreglo de vecinos del vértice actual
+        for (k = 0; k < grado_aux; k++) {
+            //Si fuera menor, significa que ya analizó ese vértice
+            if (G->vertex_array[i]->vecinos[k] > i) {
                 printf("e %u %u\n", G->vertex_array[i]->id, G->vertex_array[G->vertex_array[i]->vecinos[k]]->id);
             }
         }
@@ -269,23 +241,19 @@ int ImprimeGrafo(GrafP G)
 }
 
 
-u32 CantidadDeColores(GrafP G)
-{
+u32 CantidadDeColores(GrafP G) {
     return G->color_count; // Retorno la cantidad de colores del grafo
 }
 
 
-u32 NumeroVerticesDeColor(GrafP G, u32 i)
-{
+u32 NumeroVerticesDeColor(GrafP G, u32 i) {
     u32 cant_color = 0; // Variable que contiene la cantidad de vertices con el color 'i'
     u32 j; // Indice para recorrer el arreglo de vertices
 
     // Recorremos el arreglo de vertices
-    for(j = 0; j < G->vertex_count; j++)
-    {
+    for (j = 0; j < G->vertex_count; j++) {
         // Si un vertices tiene el color 'i' aumentamos la variable cant_color
-        if(G->vertex_array[j]->color == i)
-        {
+        if (G->vertex_array[j]->color == i) {
             cant_color ++;
         }
     }
@@ -293,49 +261,42 @@ u32 NumeroVerticesDeColor(GrafP G, u32 i)
 }
 
 
-u32 ImprimirColor(GrafP G, u32 i)
-{
+u32 ImprimirColor(GrafP G, u32 i) {
     u32 iterator; // Variable para recorrer el arreglo de vertices
     u32 cantidad_vertex_color = 0; // Varible que contiene la cantidad de vertices de color 'i'
     bool find = false; // Flag para saber si hay vertices de color 'i'
 
     // Recorremos el arreglo de vertices
-    for (iterator = 0; iterator < G->vertex_count; iterator++)
-    {
+    for (iterator = 0; iterator < G->vertex_count; iterator++) {
         // Nos fijamos si hay vertices tiene el color 'i'
-        if (G->vertex_array[iterator]->color == i)
-        {
+        if (G->vertex_array[iterator]->color == i) {
             // Esto es para que la impresion de la salida sea como la que se especifico
-            if (!find)
-            {
+            if (!find) {
                 printf("Vertices de Color %u: ", i);
                 printf("%u", G->vertex_array[iterator]->id);
             }
-            else
-            {
+            else {
                 printf(", %u", G->vertex_array[iterator]->id);
             }
-            
+
             find = true;
             cantidad_vertex_color ++; // Aumentamos la cantidad de vertices que tienen el colr 'i'
         }
     }
 
     // Si no hay vertices de color 'i'
-    if (!find)
-    {
+    if (!find) {
         printf("No hay vertices de color %u", i);
     }
 
-    printf("->\n");
+    printf(".\n");
 
     return cantidad_vertex_color;
 }
 
 
 
-u32 Greedy(GrafP G)
-{
+u32 Greedy(GrafP G) {
     u32 i = 0; // Variable para recorrer el arreglo de vértices
     u32 j = 0; // Variable para recorrer el arreglo de vecinos
     u32 color_actual = 1; // Variable para seleccionar el color
@@ -343,25 +304,22 @@ u32 Greedy(GrafP G)
     u32 max_color = 0; // Variable para indicar cuantos colores se usaron
     // Colorea el primer vértice con color 1
     G->vertex_array[G->array_orden[0]]->color = 1;
+
     // Inicializa el resto de colores de los vértices en 0
-    for(i = 1; i < G->vertex_count; i++)
-    {
+    for (i = 1; i < G->vertex_count; i++) {
         G->vertex_array[G->array_orden[i]]->color = 0;
     }
     // Recorre el arreglo de vértices para ir coloreandolos
-    for(i = 1; i < G->vertex_count; i++)
-    {
+    for (i = 1; i < G->vertex_count; i++) {
         j = 0;
         color_actual = 1;
         grado_aux = G->vertex_array[G->array_orden[i]]->grado;
         // Recorre el arreglo de vecinos para ver con que color
         // (que no exista en ese arreglo), colorear el vértice actual
-        while(j < grado_aux)
-        {
+        while (j < grado_aux) {
             j++;
 
-            if(color_actual == G->vertex_array[G->vertex_array[G->array_orden[i]]->vecinos[j-1]]->color)
-            {
+            if (color_actual == G->vertex_array[G->vertex_array[G->array_orden[i]]->vecinos[j-1]]->color) {
                 color_actual++;
                 j = 0;
             }
@@ -369,8 +327,7 @@ u32 Greedy(GrafP G)
         // Colorea el vértice una vez que decidió el color
         G->vertex_array[G->array_orden[i]]->color = color_actual;
         // Guardamos el mayor color que se usa para colorear
-        if(max_color < color_actual)
-        {
+        if (max_color < color_actual) {
             max_color = color_actual;
         }
     }
@@ -381,8 +338,7 @@ u32 Greedy(GrafP G)
 }
 
 
-u32 DSATUR(GrafP G)
-{
+u32 DSATUR(GrafP G) {
     u32 i,j,k = 0; // Variables para recorrer varios arreglos (vértices, vecinos, dsatur, etc)
     u32 dsatur_aux = 0; // Variable para encontrar el maximo grado de saturación
     u32 max_dsatur = 0; // Variable para guardar el maximo grado de saturación en cada iteración
@@ -396,37 +352,33 @@ u32 DSATUR(GrafP G)
     u32 vecino_j = 0; // Utilizada para los vecinos del vértice a colorear
     bool falta_colorear = true; // Indica si faltan o no vértices por colorear
     bool no_actualizar_dsatur = false; // Indica si se debe actualizar el grado de saturación
+
     // Inicialización de colores y grado de saturación en 0
-    for(i = 0; i < G->vertex_count; i++)
-    {
+    for (i = 0; i < G->vertex_count; i++) {
         dsatur[i] = 0;
         G->vertex_array[G->array_orden[i]]->color = 0;
+
         // Buscamos el vértice de mayor grado
-        if(G->vertex_array[G->array_orden[i]]->grado > grado_aux)
-        {
+        if (G->vertex_array[G->array_orden[i]]->grado > grado_aux) {
             max_grado = i;
             grado_aux = G->vertex_array[G->array_orden[i]]->grado;
         }
     }
     // Toma el vértice de mayor grado y lo colorea con 1
     G->vertex_array[G->array_orden[max_grado]]->color = 1;
+
     // Actualiza el grado de saturación de los vecinos del vértice coloreado
-    for(j = 0; j < G->vertex_array[G->array_orden[max_grado]]->grado; j++)
-    {
+    for (j = 0; j < G->vertex_array[G->array_orden[max_grado]]->grado; j++) {
         dsatur[G->vertex_array[G->array_orden[max_grado]]->vecinos[j]]++;
     }
 
     // Bucle que colorea todos los vértices restantes
-    while(falta_colorear)
-    {
+    while (falta_colorear) {
         dsatur_aux = 0;
         // Buscamos el mayor grado de saturación
-        for(i = 0;i < G->vertex_count;i++)
-        {
-            if(G->vertex_array[G->array_orden[i]]->color == 0)
-            {
-                if(dsatur[G->array_orden[i]] > dsatur_aux)
-                {
+        for (i = 0;i < G->vertex_count;i++) {
+            if (G->vertex_array[G->array_orden[i]]->color == 0) {
+                if (dsatur[G->array_orden[i]] > dsatur_aux) {
                     max_dsatur = i;
                     dsatur_aux = dsatur[G->array_orden[i]];
                 }
@@ -437,16 +389,12 @@ u32 DSATUR(GrafP G)
         /* Para los casos de empates en grado de saturación,
            busca el vértice de mayor grado entre los que tienen
            el mayor grado de saturación */
-        for(i = 0; i < G->vertex_count; i++)
-        {
-            if(G->vertex_array[G->array_orden[i]]->color == 0)
-            {
-                if(dsatur[G->array_orden[i]] == dsatur_aux)
-                {
+        for (i = 0; i < G->vertex_count; i++) {
+            if (G->vertex_array[G->array_orden[i]]->color == 0) {
+                if (dsatur[G->array_orden[i]] == dsatur_aux) {
                     empate_dsatur++;
-                    
-                    if(G->vertex_array[G->array_orden[i]]->grado > grado_aux)
-                    {
+
+                    if (G->vertex_array[G->array_orden[i]]->grado > grado_aux) {
                         grado_aux = G->vertex_array[G->array_orden[i]]->grado;
                         max_grado = i;
                     }
@@ -454,12 +402,10 @@ u32 DSATUR(GrafP G)
             }
         }
         // Selecciona el vértice de acuerdo a si hubo o no empates
-        if(empate_dsatur >= 2)
-        {
+        if (empate_dsatur >= 2) {
             por_colorear = max_grado;
         }
-        else
-        {
+        else {
             por_colorear = max_dsatur;
         }
 
@@ -467,34 +413,29 @@ u32 DSATUR(GrafP G)
         grado_aux = G->vertex_array[G->array_orden[por_colorear]]->grado;
         j = 0;
         // Busca como Greedy con que color colorear el vértice actual
-        while(j < grado_aux)
-        {
+        while (j < grado_aux) {
             j++;
-            
-            if(color_actual == G->vertex_array[G->vertex_array[G->array_orden[por_colorear]]->vecinos[j-1]]->color)
-            {
+
+            if(color_actual == G->vertex_array[G->vertex_array[G->array_orden[por_colorear]]->vecinos[j-1]]->color) {
                 color_actual++;
                 j = 0;
             }
         }
+
         // Actualización del grado de saturación observado los vecinos de los vecinos del vértice coloreado
-        for(j = 0;j < grado_aux; j++)
-        {
+        for (j = 0;j < grado_aux; j++) {
             vecino_j = G->vertex_array[G->array_orden[por_colorear]]->vecinos[j];
-            
-            if(G->vertex_array[G->array_orden[vecino_j]]->color == 0)
-            {
+
+            if (G->vertex_array[G->array_orden[vecino_j]]->color == 0) {
                 k = 0;
-                
-                while(k < G->vertex_array[G->array_orden[vecino_j]]->grado && no_actualizar_dsatur)
-                {
+
+                while (k < G->vertex_array[G->array_orden[vecino_j]]->grado && no_actualizar_dsatur) {
                     i = G->vertex_array[G->vertex_array[G->array_orden[vecino_j]]->vecinos[k]]->color;
                     no_actualizar_dsatur = no_actualizar_dsatur || (color_actual == i);
                     k++;
                 }
-                
-                if(!no_actualizar_dsatur)
-                {
+
+                if (!no_actualizar_dsatur) {
                     dsatur[vecino_j]++;
                 }
             }
@@ -503,8 +444,7 @@ u32 DSATUR(GrafP G)
         i = 0;
         falta_colorear = false;
         // Se fija si quedan vértices por colorear
-        while(i < G->vertex_count && !falta_colorear)
-        {
+        while (i < G->vertex_count && !falta_colorear) {
             falta_colorear = falta_colorear || (G->vertex_array[G->array_orden[i]]->color == 0);
             i++;
         }
@@ -512,8 +452,7 @@ u32 DSATUR(GrafP G)
         G->vertex_array[G->array_orden[por_colorear]]->color = color_actual;
 
         // Guardamos el mayor color que se usa para colorear
-        if(color_max < color_actual)
-        {
+        if (color_max < color_actual) {
             color_max = color_actual;
         }
     }
@@ -525,8 +464,7 @@ u32 DSATUR(GrafP G)
 
 
 // Procedimiento para swapear (intercambiar) dos valores de un arreglo.
-void swap(u32 *array, u32 i, u32 j)
-{
+void swap(u32 *array, u32 i, u32 j) {
     u32 tmp = array[i];
     array[i] = array[j];
     array[j] = tmp;
@@ -534,25 +472,20 @@ void swap(u32 *array, u32 i, u32 j)
 
 
 //------------------- Funciones auxiliares de Quick Sort -------------------
-u32 Pivot(u32 *array, GrafP G, u32 left, u32 right)
-{
+u32 Pivot(u32 *array, GrafP G, u32 left, u32 right) {
     u32 piv, i, j;
     piv = left;
     i = left + 1;
     j = right;
-    
-    while (i <= j)
-    {
-        if (G->vertex_array[(G->array_orden[i])]->grado > G->vertex_array[(G->array_orden[piv])]->grado)
-        {
+
+    while (i <= j) {
+        if (G->vertex_array[(G->array_orden[i])]->grado > G->vertex_array[(G->array_orden[piv])]->grado) {
             i++;
         }
-        else if (G->vertex_array[(G->array_orden[j])]->grado <= G->vertex_array[(G->array_orden[piv])]->grado)
-        {
+        else if (G->vertex_array[(G->array_orden[j])]->grado <= G->vertex_array[(G->array_orden[piv])]->grado) {
             j--;
         }
-        else
-        {
+        else {
             swap(array, i, j);
             i++;
             j--;
@@ -561,26 +494,22 @@ u32 Pivot(u32 *array, GrafP G, u32 left, u32 right)
 
     swap(array, piv, j);
     piv = j;
-    
+
     return piv;
 }
 
 
-void Quick_Sort_Rec(u32 *array, GrafP G, u32 left, u32 right)
-{
+void Quick_Sort_Rec(u32 *array, GrafP G, u32 left, u32 right) {
     u32 piv;
-    
-    if (right > left && right != 0 && left != UINT32_MAX)
-    {
+
+    if (right > left && right != 0 && left != UINT32_MAX) {
         piv = Pivot(array, G, left, right);
-        
-        if(piv != 0)
-        {
+
+        if(piv != 0) {
             Quick_Sort_Rec(array, G, left, piv - 1);
         }
-        
-        if(piv != UINT32_MAX)
-        {
+
+        if(piv != UINT32_MAX) {
             Quick_Sort_Rec(array, G, piv + 1, right);
         }
     }
@@ -589,14 +518,12 @@ void Quick_Sort_Rec(u32 *array, GrafP G, u32 left, u32 right)
 // No hay mucho que explicar en este algoritmo de ordenacion, es muy conocido
 // Lo unico que se realizo fueron adaptaciones a nuestra necesidad, pero el concepto
 // sigue siendo el mismo
-void Quick_Sort(u32 *array, GrafP G, u32 length)
-{
+void Quick_Sort(u32 *array, GrafP G, u32 length) {
     Quick_Sort_Rec(array, G, 0, length - 1);
 }
 //-------------------------------------------------------------------------
 
-void OrdenWelshPowell(GrafP G)
-{
+void OrdenWelshPowell(GrafP G) {
     Quick_Sort(G->array_orden, G, G->vertex_count); // Usamos el algoritmo de ordenamiento "Quick Sort"
                                                     // Para ordenar el arreglo de orden segun el grado de cada vertice
 }
@@ -605,15 +532,12 @@ void OrdenWelshPowell(GrafP G)
 // Funcione que calcula el maximo elemento de un arreglo
 // Setea esa celda en 0, para que no sea elegida otra vez
 // Y nos retorna su posicion
-u32 Calcular_Mayor(u32 *array, u32 length)
-{
+u32 Calcular_Mayor(u32 *array, u32 length) {
     u32 mayor = 0;
     u32 posicion = 0;
 
-    for(u32 i = 1; i <= length; i++)
-    {
-        if(array[i] > mayor)
-        {
+    for (u32 i = 1; i <= length; i++) {
+        if (array[i] > mayor) {
             mayor = array[i];
             posicion = i;
         }
@@ -626,8 +550,7 @@ u32 Calcular_Mayor(u32 *array, u32 length)
 
 // Se pueden optimizar metiendo el Calcular Maximo adentro y obteniendo la cantidad de vertices con dicho color y disminurlo con cada swap
 
-void GrandeChico(GrafP G)
-{
+void GrandeChico(GrafP G) {
     u32 cant_colores = CantidadDeColores(G); // Cantidad de colores que tiene el grafo
     u32 index_color; // Indice para recorrer el arreglo de colores
     u32 posicion_color = 0; // Variable que guarda la posicion (color) del arreglo de colores
@@ -641,24 +564,20 @@ void GrandeChico(GrafP G)
     u32 *array_colores = calloc(cant_colores + 1, sizeof(u32));
 
     // Recorremos el array de colores asignando la cantidad de vertices por color
-    for(i = 1; i <= cant_colores; i++)
-    {
+    for (i = 1; i <= cant_colores; i++) {
         array_colores[i] = NumeroVerticesDeColor(G, i);
     }
 
     // Recorro el arreglo de colores
-    for(index_color = 1; index_color <= cant_colores; index_color++)
-    {
+    for (index_color = 1; index_color <= cant_colores; index_color++) {
         // Busco el maximo elemento de ese arreglo y devuelvo su posicion
         posicion_color = Calcular_Mayor(array_colores, cant_colores);
 
         j = 0; // Seteo el indice en 0 para recorrer desde el principio el arreglo de vertices
         // Recorro el array de vertices
-        while(j < G->vertex_count && indice_vertice < G->vertex_count)
-        {
+        while (j < G->vertex_count && indice_vertice < G->vertex_count) {
             // Chequeo si algun elemento tiene el color devuelto por la funcion Calcular_Mayor
-            if(G->vertex_array[G->array_orden[j]]->color == posicion_color)
-            {
+            if (G->vertex_array[G->array_orden[j]]->color == posicion_color) {
                 swap(G->array_orden, j, indice_vertice); // Swapeo los elementos del array de orden
                 indice_vertice ++; // Me muevo una posicion para adelante en el arreglo de orden
             }
@@ -673,15 +592,12 @@ void GrandeChico(GrafP G)
 // Funcione que calcula el minimo elemento de un arreglo
 // Setea esa celda en UINT32_MAX (maximo valor de 32 bits), para que no sea elegida otra vez
 // Y nos retorna su posicion
-u32 Calcular_Menor(u32 *array, u32 length)
-{
+u32 Calcular_Menor(u32 *array, u32 length) {
     u32 menor = UINT32_MAX;
     u32 posicion = 0;
 
-    for(u32 i = 1; i <= length; i++)
-    {
-        if(array[i] < menor)
-        {
+    for (u32 i = 1; i <= length; i++) {
+        if (array[i] < menor) {
             menor = array[i];
             posicion = i;
         }
@@ -693,8 +609,7 @@ u32 Calcular_Menor(u32 *array, u32 length)
 }
 
 
-void ChicoGrande(GrafP G)
-{
+void ChicoGrande(GrafP G) {
     u32 cant_colores = CantidadDeColores(G); // Cantidad de colores que tiene el grafo
     u32 index_color; // Indice para recorrer el arreglo de colores
     u32 posicion_color = 0; // Variable que guarda la posicion (color) del arreglo de colores
@@ -710,24 +625,20 @@ void ChicoGrande(GrafP G)
     array_colores[0] = UINT32_MAX; // Seteamos el valor que esta en la posicion 0 en UINT32_MAX
 
     // Recorremos el array de colores asignando la cantidad de vertices por color
-    for(i = 1; i <= cant_colores; i++)
-    {
+    for (i = 1; i <= cant_colores; i++) {
         array_colores[i] = NumeroVerticesDeColor(G, i);
     }
 
     // Recorro el arreglo de colores
-    for(index_color = 1; index_color <= cant_colores; index_color++)
-    {
+    for (index_color = 1; index_color <= cant_colores; index_color++) {
         // Busco el minimo elemento de ese arreglo y devuelvo su posicion
         posicion_color = Calcular_Menor(array_colores, cant_colores);
 
         j = 0; // Seteo el indice en 0 para recorrer desde el principio el arreglo de vertices
         // Recorro el array de vertices
-        while(j < G->vertex_count && indice_vertice < G->vertex_count)
-        {
+        while (j < G->vertex_count && indice_vertice < G->vertex_count) {
             // Chequeo si algun elemento tiene el color devuelto por la funcion Calcular_Menor
-            if(G->vertex_array[G->array_orden[j]]->color == posicion_color)
-            {
+            if (G->vertex_array[G->array_orden[j]]->color == posicion_color) {
                 swap(G->array_orden, j, indice_vertice); // Swapeo los elementos del array de orden
                 indice_vertice ++; // Me muevo una posicion para adelante en el arreglo de orden
             }
@@ -737,24 +648,20 @@ void ChicoGrande(GrafP G)
 
     free(array_colores); // Libero el arreglo de colores
 }
-    
 
-void Revierte(GrafP G)
-{
+
+void Revierte(GrafP G) {
     u32 index = 0; // Indice del array de orden
     u32 i; // Indice del arreglo de vertices
     u32 k; // Variable que contendra la cantidad de colores del grafo
 
     // Recoro los colores del mas grande al mas chico
-    for (k = CantidadDeColores(G); k > 0; k--)
-    {
+    for (k = CantidadDeColores(G); k > 0; k--) {
         i = 0; // Seteo la posicion en 0 para recorrer desde el principio el arreglo de vertices
         // Recorro el array de vertices
-        while(i < G->vertex_count && index < G->vertex_count)
-        {
+        while (i < G->vertex_count && index < G->vertex_count) {
             // Chequeo si algun elemento tiene el color devuelto por la funcion Calcular_Menor
-            if(G->vertex_array[G->array_orden[i]]->color == k)
-            {
+            if (G->vertex_array[G->array_orden[i]]->color == k) {
                 swap(G->array_orden, i, index); // Swapeo los elementos del array de orden
                 index++; // Me muevo una posicion para adelante en el arreglo de orden
             }
@@ -784,33 +691,27 @@ void OrdenAleatorio(GrafP G)
     numero_aleatorio = rand() % cantidad_colores + 1; // Numero aleatorio entre 1 y cantidad_colores ( [1 ... cantidad_colores] )
 
     // Itero tantas veces como colores tenga
-    while (cantidad_colores_variable > 0)
-    {
+    while (cantidad_colores_variable > 0) {
         hacer_swap = true; // Me indice que puedo hacer el swapeo
 
         // Corrobora si el numero aleatorio ya fue elegido, buscando en el array aleatorio
         // Si en la posicion esa hay o no un 1
-        if (flag)
-        {
-            if (array_aleatorio[numero_aleatorio] == 1)
-            {
+        if (flag) {
+            if (array_aleatorio[numero_aleatorio] == 1) {
                 hacer_swap = false; // Si el nuemero aleatorio ya fue elegido, no hago el swap y elijo otro numero
             }
         }
 
         // Chequea si puedo hacer el Swap
-        if (hacer_swap)
-        {
+        if (hacer_swap) {
             array_aleatorio[numero_aleatorio] = 1; // Guardo el numero aleatorio en el arreglo. Si es 1 es porque ya salio, 0 sino
             flag = true; // Seteo el flag en True para que para los proximos aleatorios sean examinados,
                          // para saber si fueron o no elegidos
             i = 0; // Seteo la posicion en 0 para recorrer desde el principio el arreglo de vertices
             // Recorro el array de vertices
-            while(i < G->vertex_count && index < G->vertex_count)
-            {
+            while (i < G->vertex_count && index < G->vertex_count) {
                 // Chequeo si algun elemento tiene el mismo color que indica el numero aleatorio
-                if(G->vertex_array[G->array_orden[i]]->color == numero_aleatorio)
-                {
+                if (G->vertex_array[G->array_orden[i]]->color == numero_aleatorio) {
                     swap(G->array_orden, i, index); // Swapeo los elementos del array de orden
                     index++; // Me muevo una posicion mas en el array de orden
                 }

@@ -8,7 +8,7 @@ Integrantes:
 ------------
 
     * Mario Ferreyra
-      E-mail: marioezequiel.ferreyra@yahoo.com.ar
+      E-mail: ferreyramario7@gmail.com
 
     * Alan Bracco
       E-mail: internetagb@gmail.com
